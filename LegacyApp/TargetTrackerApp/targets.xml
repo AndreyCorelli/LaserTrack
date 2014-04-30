@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<targets>
+  <RoundTarget name="B-37"
+               comment="25m rapid pistol fire target, scale 1:2" size="170;170"
+               markByRad="15;10 26;9 37.5;8 50;7 61.5;6 72;5" />
+</targets>
