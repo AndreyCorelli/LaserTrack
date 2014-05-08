@@ -1,0 +1,164 @@
+﻿
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+	<meta charset='utf-8' />
+	<title>Laser Track</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<style>
+		body {
+			margin-top:2%;
+			text-align:center;
+			color:black;
+			background-color:white;
+		}
+		video { 
+			position:absolute;
+			visibility:hidden;
+		}
+		canvas { border:2px solid blue;}
+		button {
+			border:none;
+			display:block;
+			padding:0.5em 1em;
+			margin:1% auto 0;
+			cursor:pointer;
+			color:#fff;
+			background-color:#9f361b;
+		}
+		button:active { background-color:#e44d26; }
+	</style>
+	
+    <script src="js/point.js"></script>
+    <script src="js/spot.js"></script>
+
+    <script type="text/javascript">
+        var crossModeIsOn = false;
+        var spotParams = new LazerSpot();
+
+        function toogleCrossMode() {            
+            if (!crossModeIsOn) {
+                spotParams.patRed = parseInt(document.getElementById('spotRed').value);
+                spotParams.patGreen = parseInt(document.getElementById('spotGreen').value);
+                spotParams.patBlue = parseInt(document.getElementById('spotBlue').value);
+                spotParams.squareDev = parseInt(document.getElementById('spotDev').value);
+                spotParams.minPointsCount = parseInt(document.getElementById('spotMinPt').value);
+                spotParams.maxPointsToConsiderDot = parseInt(document.getElementById('spotMaxPt').value);
+            }
+            crossModeIsOn = !crossModeIsOn;
+        }
+
+	    function onLoad () {
+	        var isStreaming = false;
+	        var videoCtx = document.getElementById('v');
+	        var c = document.getElementById('c');
+            var btnCrossMode = document.getElementById('btnCrossMode');
+	        var con = c.getContext('2d');
+	        var w = 600;
+	        var h = 420;
+
+	        // Cross browser
+	        navigator.getUserMedia = (navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia);
+	        if (navigator.getUserMedia) {
+	            // Request access to video only
+	            navigator.getUserMedia(
+                    {
+                        video: true,
+                        audio: false
+                    },
+                    function (stream) {
+                        // Cross browser checks
+                        var url = window.URL || window.webkitURL;
+                        videoCtx.src = url ? url.createObjectURL(stream) : stream;
+                        // Set the video to play
+                        videoCtx.play();
+                    },
+                    function (error) {
+                        console.log(error);
+                        alert('Something went wrong. (error code ' + error.code + ')');
+                        return;
+                    }
+                );
+	        }
+	        else {
+	            alert('Sorry, the browser you are using doesn\'t support getUserMedia');
+	            return;
+	        }
+
+	        // Wait until the video stream can play
+	        videoCtx.addEventListener('canplay', function (e) {
+	            if (!isStreaming) {
+	                // videoWidth isn't always set correctly in all browsers
+	                if (videoCtx.videoWidth > 0)
+	                    h = videoCtx.videoHeight / (videoCtx.videoWidth / w);
+	                c.setAttribute('width', w);
+	                c.setAttribute('height', h);
+	                // Reverse the canvas image
+	                //con.translate(w, 0);
+	                //con.scale(-1, 1);
+	                isStreaming = true;
+	            }
+	        }, false);
+
+	        // Wait for the video to start to play
+	        videoCtx.addEventListener('play', function () {
+	            // Every 33 milliseconds copy the video image to the canvas
+	            setInterval(function () {
+	                if (videoCtx.paused || videoCtx.ended) return;
+	                con.fillRect(0, 0, w, h);
+	                con.drawImage(videoCtx, 0, 0, w, h);
+	                if (crossModeIsOn) recognizeSpot();
+	            }, 33);
+	        }, false);
+
+	        var recognizeSpot = function () {
+	            // получить биты картинки
+	            var imageData = con.getImageData(0, 0, c.width, c.height);
+	            
+	            // отметить кластер
+	            var pointOfMassCenter = FindLaserSpotCenter(spotParams, imageData);
+	            if (pointOfMassCenter)
+	                drawColorCross(con, pointOfMassCenter.x, pointOfMassCenter.y, 6);
+	            clusters = null;
+	        }
+
+	        // When the grey button is clicked, toggle the greyness indicator
+	        btnCrossMode.addEventListener('click', toogleCrossMode, false);
+	    }
+	</script>
+</head>
+<body onload="onLoad()">
+	<video id='v'></video>	
+	<canvas id='c'></canvas>
+	<button id='btnCrossMode'>Toggle Cross</button>
+
+    <br />
+    <br />
+    <br />
+    <table>
+        <tr>
+            <td>R</td> <td>G</td> <td>B</td>  <td>Max dev.</td>  <td>Min points</td>  <td>Max points</td>
+        </tr>
+        <tr>
+            <td>
+                <input type="text" id="spotRed" value="255" />
+            </td>
+            <td>
+                <input type="text" id="spotGreen" value="100" />
+            </td>
+            <td>
+                <input type="text" id="spotBlue" value="100" />
+            </td>
+            <td>
+                <input type="text" id="spotDev" value="5000" />
+            </td>
+            <td>
+                <input type="text" id="spotMinPt" value="20" />
+            </td>            
+            <td>
+                <input type="text" id="spotMaxPt" value="150" />
+            </td>            
+        </tr>
+    </table>
+</body>
+</html>

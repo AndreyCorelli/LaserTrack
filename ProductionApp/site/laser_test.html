@@ -1,0 +1,185 @@
+﻿
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+	<meta charset='utf-8' />
+	<title>Laser Track Test</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<style>
+		body {
+			margin-top:2%;
+			text-align:center;
+			color:#fff;
+			background-color:white;
+		}
+		video { 
+			position:absolute;
+			visibility:hidden;
+		}
+		canvas { border:3px solid #abbaab;}
+	</style>
+	
+    <script src="js/point.js"></script>
+    <script src="js/spot.js"></script>
+
+    <script type="text/javascript">
+        var context = 0, canvas = 0, canvasResult = 0;
+
+        function onLoad() {
+            canvas = document.getElementById('canSrc');
+            canvasResult = document.getElementById('canRst');
+            context = canvas.getContext('2d');
+
+            // прогнать тесты
+            testScanLineConsume();
+            testScanClustersAreStick();
+            testConsumeCluster();
+            testMakePointCluster();
+            testMergeClusters();
+            testRecognizeSpot();
+        }
+
+        function testScanLineConsume() {
+            var line1 = new ScanLine();
+            line1.scans = [new Point(1, 10), new Point(10, 11)];
+
+            var line2 = new ScanLine();
+            line2.scans = [new Point(2, 12), new Point(11, 13)];
+
+            line1.Consume(line2);
+            console.assert(line1.scans.length == 4, 'line1 after consume has to have: ' + line1.scans.length + ' length');
+            console.assert(line1.scans[1].y == 12 && line1.scans[3].y == 13,
+                'line1 - all X-coords should be ordered after consuming');
+            console.log('testScanLineConsume: completed');
+        }
+
+        function testScanClustersAreStick() {
+            var clusterA = new ScanCluster();
+            clusterA.lines = [new ScanLine()];
+            clusterA.lines[0].y = 100;
+            clusterA.lines[0].scans = [new Point(0, 6), new Point(8, 19)];
+
+            var clusterB = new ScanCluster();
+            clusterB.lines = [new ScanLine()];
+            clusterB.lines[0].y = 101;
+            clusterB.lines[0].scans = [new Point(0, 6), new Point(8, 19)];
+
+            console.assert(clusterA.AreStick(clusterB), 'clusters should stick');
+            console.log('testScanClustersAreStick: completed');
+        }
+
+        function testConsumeCluster() {
+            var clusterA = new ScanCluster();
+            clusterA.lines = [new ScanLine()];
+            clusterA.lines[0].y = 100;
+            clusterA.lines[0].scans = [new Point(0, 6), new Point(8, 19)];
+
+            var clusterB = new ScanCluster();
+            clusterB.lines = [new ScanLine()];
+            clusterB.lines[0].y = 101;
+            clusterB.lines[0].scans = [new Point(0, 6), new Point(8, 19)];
+
+            clusterA.ConsumeCluster(clusterB);
+            console.assert(clusterA.lines.length == 2, 'cluster B should be consumed');
+
+            console.log('testConsumeCluster: completed');
+        }
+
+        function testMakePointCluster() {
+            var clusterA = new ScanCluster();
+            clusterA.lines = [new ScanLine(), new ScanLine()];
+            clusterA.lines[0].y = 100;
+            clusterA.lines[0].scans = [new Point(0, 6), new Point(8, 19)];
+            clusterA.lines[1].y = 101;
+            clusterA.lines[1].scans = [new Point(2, 19)];
+
+            var pointCluster = clusterA.ToPointCluster();
+            console.assert(pointCluster.points.length == 37, 'resulted point cluster should have all the points');
+            console.log('testMakePointCluster: completed');
+        }
+
+        function testMergeClusters() {
+            var clusterA = new ScanCluster();
+            clusterA.lines = [new ScanLine(), new ScanLine()];
+            clusterA.lines[0].y = 100;
+            clusterA.lines[0].scans = [new Point(0, 6), new Point(8, 19)];
+            clusterA.lines[1].y = 101;
+            clusterA.lines[1].scans = [new Point(2, 19)];
+            var clusters = [clusterA];
+
+            var lines = [new ScanLine()];
+            lines[0].y = 102;
+            lines[0].scans = [new Point(5, 8), new Point(11, 10)];
+
+            MergeClusters(lines, clusters);
+            console.assert(clusters.length == 1, 'MergeClusters - кластер должен быть поглощен');
+            console.assert(clusters[0].lines.length == 3, 'MergeClusters - кластер должен вырасти на одну линию');
+
+            console.log('testMergeClusters: completed');
+        }
+
+        function testRecognizeSpot() {
+            // закрасить
+            context.rect(0, 0, canvas.width, canvas.height);
+            context.fillStyle = "gray";
+            context.fill();
+
+            // нарисовать пятно
+            var centerX = canvas.width / 2;
+            var centerY = canvas.height / 2;
+            var radius = 4;
+
+            context.beginPath();
+            context.arc(centerX, centerY, radius, 0, 2 * Math.PI, false);
+            context.fillStyle = 'red';
+            context.fill();
+
+            // получить биты картинки
+            var imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+            var data = imageData.data;
+
+            // найти координаты кластера (кластеров)
+            var spotParams = new LazerSpot();
+            spotParams.patRed = 255;
+            spotParams.patGreen = 0;
+            spotParams.patBlue = 0;
+
+            var clusters = null;
+            var lines = null;
+            var clusters = FindClusters(spotParams, imageData);
+
+            // отметить кластер
+            var pointOfMassCenter = FindLaserSpotCenter(spotParams, imageData);
+            console.assert(pointOfMassCenter, 'center cluster should be found');
+
+            drawColorCross(context, pointOfMassCenter.x, pointOfMassCenter.y);
+
+            // нарисовать получившиеся кластеры
+            for (var i = 0; i < clusters.length; i++) {
+                for (var j = 0; j < clusters[i].points.length; j++) {
+                    var pointIndex = clusters[i].points[j].x + clusters[i].points[j].y * canvas.width;
+                    var colorOffset = i % 3;
+                    var colorIndex = pointIndex * 4;
+                    data[colorIndex] = 0;
+                    data[colorIndex + 1] = 0;
+                    data[colorIndex + 2] = 0;
+                    data[colorIndex + colorOffset] = 128;
+                }
+            }
+            var contextResult = canvasResult.getContext('2d');
+            contextResult.putImageData(imageData, 0, 0);
+            console.log('clusters count: ' + clusters.length);
+            console.assert(clusters.length > 0, 'testRecognizeSpot - кластеры должны быть найдены');
+
+            console.log('testRecognizeSpot: completed');
+        }
+	</script>
+</head>
+
+<body onload="onLoad()">
+	<canvas id='canSrc'></canvas>	
+    <br />
+    <h3>resulted clusters:</h3>
+    <canvas id='canRst'></canvas>	
+</body>
+</html>
