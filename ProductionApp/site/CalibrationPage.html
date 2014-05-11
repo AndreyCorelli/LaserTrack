@@ -1,0 +1,49 @@
+﻿<!DOCTYPE html>
+<html lang='en'>
+    <head>
+        <meta charset='utf-8' />
+        <title>Страница калибровки</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        
+        <style>
+            body {
+                margin-top:2%;
+                text-align:center;
+                color:black;
+                background-color:white;
+            }
+            canvas { border:2px solid blue;}
+        </style>
+	
+
+        <script type="text/javascript">
+            function onLoad() {
+                var canvas = document.getElementById('c');
+                var ctx = canvas.getContext('2d');
+
+                if (localStorage["imageData"] != null) {
+                    alert(localStorage["imageData"]);
+                    document.getElementById('myimage').src = localStorage["imageData"];
+                    /*
+                    canvas.width = 100;
+                    canvas.height = 100;
+                    
+                    ctx.fillStyle = "red";
+                    ctx.fillRect(0, 0, 100, 100);
+                    
+                    var img = document.createElement("img");
+                    img.src = canvas.toDataURL("image/png");
+                    document.body.appendChild(img);
+                    */
+                    //ctx.putImageData(localStorage["imageData"], 10, 70);
+                }
+            } 
+        </script>
+    </head>
+    <body onload="onLoad()">
+        <h1>Страница калибровки</h1> 
+        <canvas id='c'></canvas>
+        
+        <img id='myimage'/>
+    </body>
+</html>
