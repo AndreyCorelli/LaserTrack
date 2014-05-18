@@ -31,9 +31,9 @@
 	
     <script src="js/point.js"></script>
     <script src="js/spot.js"></script>
+    <script src="js/calibration.js"></script>
 
     <script type="text/javascript">
-        var imageData;
         var crossModeIsOn = false;
         var spotParams = new LazerSpot();
 
@@ -52,17 +52,31 @@
             }
         }
 
+        
         function makeScreenShot() {
-            localStorage["imageData"] = imageData;
-            window.location.replace("CalibrationPage.html");
+            var c = document.getElementById('c');
+            var con = c.getContext('2d');
+            
+            imageData = con.getImageData(0, 0, c.width, c.height);
+            
+            calibrationCanvas.width = c.width;
+            calibrationCanvas.height = c.height;
+            calibrationContext = calibrationCanvas.getContext('2d');
+            calibrationContext.putImageData(imageData, 0, 0);
         }
 
+        
+
+
         function onLoad() {
+            calibrationCanvas = document.getElementById('calibrationCanvas');
+            calibrationCanvas.addEventListener("click", calibrationCanvasOnClick, false);
+            
             if (localStorage["patRed"] != null) document.getElementById("spotRed").value = localStorage["patRed"];
             if (localStorage["patGreen"] != null) document.getElementById("spotGreen").value = localStorage["patGreen"];
             if (localStorage["patBlue"] != null) document.getElementById("spotBlue").value = localStorage["patBlue"];
-
             
+
             var isStreaming = false;
             var videoCtx = document.getElementById('v');
             var c = document.getElementById('c');
@@ -126,10 +140,9 @@
                 }, 33);
             }, false);
 
-            var recognizeSpot = function() {
+            var recognizeSpot = function () {
                 // получить биты картинки
-                imageData = con.getImageData(0, 0, c.width, c.height);
-
+                var imageData = con.getImageData(0, 0, c.width, c.height);
                 // отметить кластер
                 var pointOfMassCenter = FindLaserSpotCenter(spotParams, imageData);
                 if (pointOfMassCenter)
@@ -139,7 +152,7 @@
 
             // When the grey button is clicked, toggle the greyness indicator
             btnCrossMode.addEventListener('click', toogleCrossMode, false);
-            btnScreenShot.addEventListener('click', makeScreenShot, false);
+            btnScreenShot.addEventListener('click', makeScreenShot, false);          
         }
     </script>
 </head>
@@ -176,5 +189,6 @@
         </tr>
     </table>
     <button id='btnScreenShot'>Screen Shot</button>
+    <canvas id='calibrationCanvas'></canvas>
 </body>
 </html>
