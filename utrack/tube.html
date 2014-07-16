@@ -60,6 +60,11 @@
                     var curTime = array[curTimeIndex].time;
                     var nextTime = (curTimeIndex + 1) < trackLength ? array[curTimeIndex + 1].time : -1;
 
+                    if (curTime > time) {
+                        curTimeIndex = 0;
+                        continue;
+                    }
+
                     if (time >= curTime && (time <= nextTime || nextTime < 0))
                         return array[curTimeIndex].value;
 
