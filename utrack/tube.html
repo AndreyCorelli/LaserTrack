@@ -1,0 +1,356 @@
+﻿<!DOCTYPE html>
+<html>
+    <head>
+        <title>Gauge test</title>
+        <script src="js/jquery-1.6.2.min.js"></script>    
+        <script src="js/highcharts.js"></script>
+        <script src="js/highcharts-more.js"></script>
+        <script src="js/modules/exporting.js"></script>
+        
+        <!-- Трек -->
+        <script type="text/javascript">
+            var charts_data = [{ "fl_time": 1.0, "elevation_diff": 16.82, "elevation": 3813.07, "distance": 25, "h_speed": 91.58, "v_speed": 60.55, "glrat": 1.51 }, { "fl_time": 1.0, "elevation_diff": 16.34, "elevation": 3796.73, "distance": 25, "h_speed": 91.58, "v_speed": 60.55, "glrat": 1.51 }, { "fl_time": 2.0, "elevation_diff": 17.31, "elevation": 3779.42, "distance": 27, "h_speed": 100.24, "v_speed": 60.55, "glrat": 1.66 }, { "fl_time": 1.0, "elevation_diff": 9.61, "elevation": 3769.81, "distance": 27, "h_speed": 100.24, "v_speed": 55.37, "glrat": 1.81 }, { "fl_time": 1.0, "elevation_diff": 15.38, "elevation": 3754.43, "distance": 29, "h_speed": 105.52, "v_speed": 55.37, "glrat": 1.91 }, { "fl_time": 1.0, "elevation_diff": 22.11, "elevation": 3732.32, "distance": 30, "h_speed": 108.66, "v_speed": 65.77, "glrat": 1.65 }, { "fl_time": 1.0, "elevation_diff": 18.27, "elevation": 3714.05, "distance": 31, "h_speed": 111.86, "v_speed": 65.77, "glrat": 1.7 }, { "fl_time": 1.0, "elevation_diff": 0.0, "elevation": 3714.05, "distance": 32, "h_speed": 116.22, "v_speed": 65.77, "glrat": 1.77 }, { "fl_time": 1.0, "elevation_diff": 23.07, "elevation": 3690.98, "distance": 33, "h_speed": 119.17, "v_speed": 83.05, "glrat": 1.43 }, { "fl_time": 1.0, "elevation_diff": 27.88, "elevation": 3663.1, "distance": 33, "h_speed": 121.71, "v_speed": 86.51, "glrat": 1.41 }, { "fl_time": 1.0, "elevation_diff": 24.03, "elevation": 3639.07, "distance": 34, "h_speed": 125.04, "v_speed": 86.51, "glrat": 1.45 }, { "fl_time": 1.0, "elevation_diff": 22.11, "elevation": 3616.96, "distance": 35, "h_speed": 127.15, "v_speed": 86.51, "glrat": 1.47 }, { "fl_time": 1.0, "elevation_diff": 25.47, "elevation": 3591.49, "distance": 35, "h_speed": 129.09, "v_speed": 86.51, "glrat": 1.49 }, { "fl_time": 1.0, "elevation_diff": 0.0, "elevation": 3591.49, "distance": 36, "h_speed": 130.61, "v_speed": 69.23, "glrat": 1.89 }, { "fl_time": 1.0, "elevation_diff": 19.23, "elevation": 3572.26, "distance": 36, "h_speed": 132.06, "v_speed": 69.23, "glrat": 1.91 }, { "fl_time": 1.0, "elevation_diff": 29.8, "elevation": 3542.46, "distance": 36, "h_speed": 132.26, "v_speed": 96.91, "glrat": 1.36 }, { "fl_time": 1.0, "elevation_diff": 26.92, "elevation": 3515.54, "distance": 36, "h_speed": 132.26, "v_speed": 96.91, "glrat": 1.36 }, { "fl_time": 1.0, "elevation_diff": 26.43, "elevation": 3489.11, "distance": 37, "h_speed": 133.47, "v_speed": 96.91, "glrat": 1.38 }, { "fl_time": 1.0, "elevation_diff": 32.69, "elevation": 3456.42, "distance": 37, "h_speed": 135.38, "v_speed": 112.46, "glrat": 1.2 }, { "fl_time": 1.0, "elevation_diff": 31.24, "elevation": 3425.18, "distance": 38, "h_speed": 137.84, "v_speed": 112.46, "glrat": 1.23 }, { "fl_time": 1.0, "elevation_diff": 0.0, "elevation": 3425.18, "distance": 39, "h_speed": 141.22, "v_speed": 112.46, "glrat": 1.26 }, { "fl_time": 2.0, "elevation_diff": 46.63, "elevation": 3378.55, "distance": 39, "h_speed": 143.28, "v_speed": 115.92, "glrat": 1.24 }, { "fl_time": 1.0, "elevation_diff": 32.2, "elevation": 3346.35, "distance": 39, "h_speed": 143.28, "v_speed": 115.92, "glrat": 1.24 }, { "fl_time": 1.0, "elevation_diff": 26.44, "elevation": 3319.91, "distance": 40, "h_speed": 144.25, "v_speed": 95.18, "glrat": 1.52 }, { "fl_time": 1.0, "elevation_diff": 23.07, "elevation": 3296.84, "distance": 40, "h_speed": 146.38, "v_speed": 83.05, "glrat": 1.76 }, { "fl_time": 1.0, "elevation_diff": 0.0, "elevation": 3296.84, "distance": 40, "h_speed": 146.38, "v_speed": 83.05, "glrat": 1.76 }, { "fl_time": 1.0, "elevation_diff": 39.41, "elevation": 3257.43, "distance": 40, "h_speed": 146.08, "v_speed": 83.05, "glrat": 1.76 }, { "fl_time": 1.0, "elevation_diff": 10.58, "elevation": 3246.85, "distance": 40, "h_speed": 144.91, "v_speed": 58.82, "glrat": 2.46 }, { "fl_time": 1.0, "elevation_diff": 16.34, "elevation": 3230.51, "distance": 39, "h_speed": 143.02, "v_speed": 58.82, "glrat": 2.43 }, { "fl_time": 1.0, "elevation_diff": 22.59, "elevation": 3207.92, "distance": 38, "h_speed": 139.7, "v_speed": 81.32, "glrat": 1.72 }, { "fl_time": 1.0, "elevation_diff": 27.4, "elevation": 3180.52, "distance": 37, "h_speed": 135.62, "v_speed": 81.32, "glrat": 1.67 }, { "fl_time": 1.0, "elevation_diff": 19.22, "elevation": 3161.3, "distance": 36, "h_speed": 132.93, "v_speed": 69.19, "glrat": 1.92 }, { "fl_time": 1.0, "elevation_diff": 0.0, "elevation": 3161.3, "distance": 36, "h_speed": 130.2, "v_speed": 69.19, "glrat": 1.88 }, { "fl_time": 1.0, "elevation_diff": 30.77, "elevation": 3130.53, "distance": 35, "h_speed": 128.48, "v_speed": 74.38, "glrat": 1.73 }, { "fl_time": 1.0, "elevation_diff": 20.66, "elevation": 3109.87, "distance": 35, "h_speed": 126.96, "v_speed": 74.38, "glrat": 1.71 }, { "fl_time": 1.0, "elevation_diff": 15.87, "elevation": 3094.0, "distance": 34, "h_speed": 125.72, "v_speed": 57.13, "glrat": 2.2 }, { "fl_time": 1.0, "elevation_diff": 15.86, "elevation": 3078.14, "distance": 34, "h_speed": 123.94, "v_speed": 57.13, "glrat": 2.17 }, { "fl_time": 1.0, "elevation_diff": 19.22, "elevation": 3058.92, "distance": 33, "h_speed": 122.25, "v_speed": 57.13, "glrat": 2.14 }, { "fl_time": 1.0, "elevation_diff": 0.0, "elevation": 3058.92, "distance": 33, "h_speed": 122.25, "v_speed": 50.18, "glrat": 2.44 }, { "fl_time": 1.0, "elevation_diff": 13.94, "elevation": 3044.98, "distance": 34, "h_speed": 123.02, "v_speed": 50.18, "glrat": 2.45 }, { "fl_time": 1.0, "elevation_diff": 21.63, "elevation": 3023.35, "distance": 34, "h_speed": 123.99, "v_speed": 70.96, "glrat": 1.75 }, { "fl_time": 1.0, "elevation_diff": 19.71, "elevation": 3003.64, "distance": 34, "h_speed": 125.35, "v_speed": 70.96, "glrat": 1.77 }, { "fl_time": 1.0, "elevation_diff": 14.42, "elevation": 2989.22, "distance": 35, "h_speed": 126.02, "v_speed": 70.96, "glrat": 1.78 }, { "fl_time": 1.0, "elevation_diff": 19.71, "elevation": 2969.51, "distance": 35, "h_speed": 126.02, "v_speed": 70.96, "glrat": 1.78 }, { "fl_time": 1.0, "elevation_diff": 20.67, "elevation": 2948.84, "distance": 34, "h_speed": 125.0, "v_speed": 70.96, "glrat": 1.76 }, { "fl_time": 1.0, "elevation_diff": 0.0, "elevation": 2948.84, "distance": 34, "h_speed": 125.0, "v_speed": 70.96, "glrat": 1.76 }, { "fl_time": 1.0, "elevation_diff": 20.66, "elevation": 2928.18, "distance": 34, "h_speed": 125.04, "v_speed": 70.96, "glrat": 1.76 }, { "fl_time": 1.0, "elevation_diff": 19.23, "elevation": 2908.95, "distance": 35, "h_speed": 126.15, "v_speed": 70.96, "glrat": 1.78 }, { "fl_time": 1.0, "elevation_diff": 21.63, "elevation": 2887.32, "distance": 35, "h_speed": 126.15, "v_speed": 70.96, "glrat": 1.78 }, { "fl_time": 1.0, "elevation_diff": 16.34, "elevation": 2870.98, "distance": 34, "h_speed": 125.79, "v_speed": 70.96, "glrat": 1.77 }, { "fl_time": 1.0, "elevation_diff": 22.59, "elevation": 2848.39, "distance": 34, "h_speed": 124.45, "v_speed": 70.96, "glrat": 1.75 }, { "fl_time": 1.0, "elevation_diff": 0.0, "elevation": 2848.39, "distance": 34, "h_speed": 123.16, "v_speed": 70.96, "glrat": 1.74 }, { "fl_time": 1.0, "elevation_diff": 20.67, "elevation": 2827.72, "distance": 33, "h_speed": 121.81, "v_speed": 70.96, "glrat": 1.72 }, { "fl_time": 1.0, "elevation_diff": 19.23, "elevation": 2808.49, "distance": 33, "h_speed": 120.59, "v_speed": 70.96, "glrat": 1.7 }, { "fl_time": 1.0, "elevation_diff": 20.19, "elevation": 2788.3, "distance": 32, "h_speed": 118.27, "v_speed": 72.68, "glrat": 1.63 }, { "fl_time": 1.0, "elevation_diff": 21.14, "elevation": 2767.16, "distance": 32, "h_speed": 116.19, "v_speed": 72.68, "glrat": 1.6 }, { "fl_time": 1.0, "elevation_diff": 18.27, "elevation": 2748.89, "distance": 31, "h_speed": 114.3, "v_speed": 65.77, "glrat": 1.74 }, { "fl_time": 1.0, "elevation_diff": 16.34, "elevation": 2732.55, "distance": 31, "h_speed": 113.31, "v_speed": 58.82, "glrat": 1.93 }, { "fl_time": 1.0, "elevation_diff": 0.0, "elevation": 2732.55, "distance": 31, "h_speed": 113.31, "v_speed": 58.82, "glrat": 1.93 }, { "fl_time": 2.0, "elevation_diff": 37.49, "elevation": 2695.06, "distance": 31, "h_speed": 113.31, "v_speed": 62.32, "glrat": 1.82 }, { "fl_time": 1.0, "elevation_diff": 17.31, "elevation": 2677.75, "distance": 29, "h_speed": 107.04, "v_speed": 62.32, "glrat": 1.72 }, { "fl_time": 1.0, "elevation_diff": 15.38, "elevation": 2662.37, "distance": 29, "h_speed": 107.04, "v_speed": 62.32, "glrat": 1.72 }, { "fl_time": 2.0, "elevation_diff": 38.45, "elevation": 2623.92, "distance": 29, "h_speed": 107.14, "v_speed": 62.32, "glrat": 1.72 }, { "fl_time": 1.0, "elevation_diff": 0.0, "elevation": 2623.92, "distance": 29, "h_speed": 107.14, "v_speed": 62.32, "glrat": 1.72 }, { "fl_time": 1.0, "elevation_diff": 21.63, "elevation": 2602.29, "distance": 30, "h_speed": 109.76, "v_speed": 76.14, "glrat": 1.44 }, { "fl_time": 1.0, "elevation_diff": 21.15, "elevation": 2581.14, "distance": 30, "h_speed": 109.76, "v_speed": 76.14, "glrat": 1.44 }, { "fl_time": 1.0, "elevation_diff": 24.03, "elevation": 2557.11, "distance": 30, "h_speed": 110.32, "v_speed": 86.51, "glrat": 1.28 }, { "fl_time": 2.0, "elevation_diff": 47.11, "elevation": 2510.0, "distance": 31, "h_speed": 113.15, "v_speed": 86.51, "glrat": 1.31 }, { "fl_time": 1.0, "elevation_diff": 19.7, "elevation": 2490.3, "distance": 31, "h_speed": 113.15, "v_speed": 70.92, "glrat": 1.6 }, { "fl_time": 1.0, "elevation_diff": 0.0, "elevation": 2490.3, "distance": 31, "h_speed": 113.31, "v_speed": 70.92, "glrat": 1.6 }, { "fl_time": 1.0, "elevation_diff": 21.15, "elevation": 2469.15, "distance": 31, "h_speed": 113.31, "v_speed": 70.96, "glrat": 1.6 }, { "fl_time": 1.0, "elevation_diff": 19.71, "elevation": 2449.44, "distance": 30, "h_speed": 111.34, "v_speed": 70.96, "glrat": 1.57 }, { "fl_time": 1.0, "elevation_diff": 21.63, "elevation": 2427.81, "distance": 30, "h_speed": 111.34, "v_speed": 77.87, "glrat": 1.43 }, { "fl_time": 2.0, "elevation_diff": 48.55, "elevation": 2379.26, "distance": 30, "h_speed": 111.34, "v_speed": 81.32, "glrat": 1.37 }, { "fl_time": 1.0, "elevation_diff": 22.59, "elevation": 2356.67, "distance": 30, "h_speed": 111.34, "v_speed": 81.32, "glrat": 1.37 }, { "fl_time": 1.0, "elevation_diff": 0.0, "elevation": 2356.67, "distance": 31, "h_speed": 111.73, "v_speed": 81.32, "glrat": 1.37 }, { "fl_time": 1.0, "elevation_diff": 24.99, "elevation": 2331.68, "distance": 32, "h_speed": 116.96, "v_speed": 89.96, "glrat": 1.3 }, { "fl_time": 2.0, "elevation_diff": 48.07, "elevation": 2283.61, "distance": 34, "h_speed": 125.36, "v_speed": 89.96, "glrat": 1.39 }, { "fl_time": 1.0, "elevation_diff": 21.15, "elevation": 2262.46, "distance": 34, "h_speed": 125.36, "v_speed": 89.96, "glrat": 1.39 }, { "fl_time": 1.0, "elevation_diff": 25.95, "elevation": 2236.51, "distance": 36, "h_speed": 129.69, "v_speed": 89.96, "glrat": 1.44 }, { "fl_time": 1.0, "elevation_diff": 24.03, "elevation": 2212.48, "distance": 36, "h_speed": 131.34, "v_speed": 86.51, "glrat": 1.52 }, { "fl_time": 1.0, "elevation_diff": 0.0, "elevation": 2212.48, "distance": 36, "h_speed": 131.99, "v_speed": 81.36, "glrat": 1.62 }, { "fl_time": 1.0, "elevation_diff": 22.6, "elevation": 2189.88, "distance": 36, "h_speed": 132.74, "v_speed": 81.36, "glrat": 1.63 }, { "fl_time": 1.0, "elevation_diff": 24.03, "elevation": 2165.85, "distance": 37, "h_speed": 134.08, "v_speed": 83.05, "glrat": 1.61 }, { "fl_time": 1.0, "elevation_diff": 23.07, "elevation": 2142.78, "distance": 37, "h_speed": 135.32, "v_speed": 83.05, "glrat": 1.63 }, { "fl_time": 1.0, "elevation_diff": 21.63, "elevation": 2121.15, "distance": 37, "h_speed": 135.32, "v_speed": 83.05, "glrat": 1.63 }, { "fl_time": 1.0, "elevation_diff": 23.07, "elevation": 2098.08, "distance": 37, "h_speed": 135.32, "v_speed": 83.05, "glrat": 1.63 }, { "fl_time": 2.0, "elevation_diff": 19.71, "elevation": 2078.37, "distance": 37, "h_speed": 135.32, "v_speed": 83.05, "glrat": 1.63 }, { "fl_time": 1.0, "elevation_diff": 24.03, "elevation": 2054.34, "distance": 34, "h_speed": 124.63, "v_speed": 83.05, "glrat": 1.5 }, { "fl_time": 1.0, "elevation_diff": 21.63, "elevation": 2032.71, "distance": 34, "h_speed": 123.32, "v_speed": 77.87, "glrat": 1.58 }, { "fl_time": 1.0, "elevation_diff": 21.15, "elevation": 2011.56, "distance": 33, "h_speed": 121.9, "v_speed": 76.14, "glrat": 1.6 }, { "fl_time": 1.0, "elevation_diff": 19.71, "elevation": 1991.85, "distance": 33, "h_speed": 119.86, "v_speed": 76.14, "glrat": 1.57 }, { "fl_time": 1.0, "elevation_diff": 21.63, "elevation": 1970.22, "distance": 33, "h_speed": 119.86, "v_speed": 76.14, "glrat": 1.57 }, { "fl_time": 2.0, "elevation_diff": 19.7, "elevation": 1950.52, "distance": 33, "h_speed": 120.21, "v_speed": 76.14, "glrat": 1.58 }, { "fl_time": 1.0, "elevation_diff": 22.11, "elevation": 1928.41, "distance": 33, "h_speed": 120.21, "v_speed": 79.6, "glrat": 1.51 }, { "fl_time": 1.0, "elevation_diff": 23.08, "elevation": 1905.33, "distance": 33, "h_speed": 120.96, "v_speed": 83.09, "glrat": 1.46 }, { "fl_time": 2.0, "elevation_diff": 45.66, "elevation": 1859.67, "distance": 35, "h_speed": 127.58, "v_speed": 83.09, "glrat": 1.54 }, { "fl_time": 1.0, "elevation_diff": 22.59, "elevation": 1837.08, "distance": 35, "h_speed": 127.58, "v_speed": 81.32, "glrat": 1.57 }, { "fl_time": 1.0, "elevation_diff": 0.0, "elevation": 1837.08, "distance": 35, "h_speed": 128.52, "v_speed": 76.14, "glrat": 1.69 }, { "fl_time": 1.0, "elevation_diff": 21.15, "elevation": 1815.93, "distance": 35, "h_speed": 128.79, "v_speed": 76.14, "glrat": 1.69 }, { "fl_time": 1.0, "elevation_diff": 22.59, "elevation": 1793.34, "distance": 35, "h_speed": 129.06, "v_speed": 81.32, "glrat": 1.59 }, { "fl_time": 1.0, "elevation_diff": 22.59, "elevation": 1770.75, "distance": 36, "h_speed": 129.78, "v_speed": 81.32, "glrat": 1.6 }, { "fl_time": 1.0, "elevation_diff": 23.55, "elevation": 1747.2, "distance": 36, "h_speed": 130.82, "v_speed": 81.32, "glrat": 1.61 }, { "fl_time": 1.0, "elevation_diff": 21.15, "elevation": 1726.05, "distance": 36, "h_speed": 133.1, "v_speed": 76.14, "glrat": 1.75 }, { "fl_time": 1.0, "elevation_diff": 0.0, "elevation": 1726.05, "distance": 37, "h_speed": 134.6, "v_speed": 74.41, "glrat": 1.81 }, { "fl_time": 1.0, "elevation_diff": 20.67, "elevation": 1705.38, "distance": 37, "h_speed": 134.6, "v_speed": 74.41, "glrat": 1.81 }, { "fl_time": 1.0, "elevation_diff": 20.19, "elevation": 1685.19, "distance": 37, "h_speed": 133.35, "v_speed": 72.68, "glrat": 1.83 }, { "fl_time": 1.0, "elevation_diff": 19.22, "elevation": 1665.97, "distance": 37, "h_speed": 133.35, "v_speed": 72.68, "glrat": 1.83 }, { "fl_time": 2.0, "elevation_diff": 42.78, "elevation": 1623.19, "distance": 37, "h_speed": 133.35, "v_speed": 86.54, "glrat": 1.54 }, { "fl_time": 1.0, "elevation_diff": 24.04, "elevation": 1599.15, "distance": 37, "h_speed": 133.35, "v_speed": 86.54, "glrat": 1.54 }, { "fl_time": 1.0, "elevation_diff": 0.0, "elevation": 1599.15, "distance": 37, "h_speed": 133.35, "v_speed": 86.54, "glrat": 1.54 }, { "fl_time": 1.0, "elevation_diff": 25.95, "elevation": 1573.2, "distance": 36, "h_speed": 131.61, "v_speed": 93.42, "glrat": 1.41 }, { "fl_time": 1.0, "elevation_diff": 37.97, "elevation": 1535.23, "distance": 36, "h_speed": 131.61, "v_speed": 136.69, "glrat": 0.96 }, { "fl_time": 2.0, "elevation_diff": 52.88, "elevation": 1482.35, "distance": 37, "h_speed": 135.65, "v_speed": 136.69, "glrat": 0.99 }, { "fl_time": 1.0, "elevation_diff": 24.99, "elevation": 1457.36, "distance": 37, "h_speed": 135.65, "v_speed": 89.96, "glrat": 1.51 }, { "fl_time": 1.0, "elevation_diff": 17.78, "elevation": 1439.58, "distance": 37, "h_speed": 135.65, "v_speed": 64.01, "glrat": 2.12 }, { "fl_time": 1.0, "elevation_diff": 0.0, "elevation": 1439.58, "distance": 37, "h_speed": 136.48, "v_speed": 34.63, "glrat": 3.94 }, { "fl_time": 1.0, "elevation_diff": 9.62, "elevation": 1429.96, "distance": 37, "h_speed": 136.48, "v_speed": 34.63, "glrat": 3.94 }, { "fl_time": 1.0, "elevation_diff": 26.43, "elevation": 1403.53, "distance": 37, "h_speed": 134.25, "v_speed": 86.54, "glrat": 1.55 }, { "fl_time": 1.0, "elevation_diff": 24.04, "elevation": 1379.49, "distance": 37, "h_speed": 133.4, "v_speed": 86.54, "glrat": 1.54 }, { "fl_time": 1.0, "elevation_diff": 20.18, "elevation": 1359.31, "distance": 36, "h_speed": 131.82, "v_speed": 86.54, "glrat": 1.52 }, { "fl_time": 1.0, "elevation_diff": 35.57, "elevation": 1323.74, "distance": 35, "h_speed": 128.14, "v_speed": 86.54, "glrat": 1.48 }, { "fl_time": 1.0, "elevation_diff": 0.0, "elevation": 1323.74, "distance": 34, "h_speed": 122.84, "v_speed": 86.54, "glrat": 1.42 }, { "fl_time": 1.0, "elevation_diff": 33.65, "elevation": 1290.09, "distance": 31, "h_speed": 114.51, "v_speed": 110.74, "glrat": 1.03 }, { "fl_time": 1.0, "elevation_diff": 30.76, "elevation": 1259.33, "distance": 29, "h_speed": 106.48, "v_speed": 110.74, "glrat": 0.96 }, { "fl_time": 1.0, "elevation_diff": 34.61, "elevation": 1224.72, "distance": 28, "h_speed": 100.95, "v_speed": 124.6, "glrat": 0.81 }, { "fl_time": 1.0, "elevation_diff": 53.83, "elevation": 1170.89, "distance": 28, "h_speed": 100.95, "v_speed": 193.79, "glrat": 0.52 }, { "fl_time": 2.0, "elevation_diff": 90.37, "elevation": 1080.52, "distance": 28, "h_speed": 100.95, "v_speed": 193.79, "glrat": 0.52 }, { "fl_time": 1.0, "elevation_diff": 0.0, "elevation": 1080.52, "distance": 11, "h_speed": 40.53, "v_speed": 141.88, "glrat": 0.29 }, { "fl_time": 1.0, "elevation_diff": 39.41, "elevation": 1041.11, "distance": 10, "h_speed": 37.2, "v_speed": 141.88, "glrat": 0.26 }, { "fl_time": 1.0, "elevation_diff": 36.05, "elevation": 1005.06, "distance": 10, "h_speed": 36.05, "v_speed": 129.78, "glrat": 0.28 }, { "fl_time": 1.0, "elevation_diff": 18.75, "elevation": 986.31, "distance": 10, "h_speed": 36.05, "v_speed": 76.14, "glrat": 0.47 }, { "fl_time": 2.0, "elevation_diff": 21.15, "elevation": 965.16, "distance": 10, "h_speed": 36.05, "v_speed": 76.14, "glrat": 0.47 }, { "fl_time": 1.0, "elevation_diff": 8.17, "elevation": 956.99, "distance": 8, "h_speed": 30.53, "v_speed": 29.41, "glrat": 1.04 }, { "fl_time": 1.0, "elevation_diff": 0.0, "elevation": 956.99, "distance": 7, "h_speed": 27.88, "v_speed": 24.23, "glrat": 1.15 }, { "fl_time": 1.0, "elevation_diff": 6.73, "elevation": 950.26, "distance": 7, "h_speed": 27.88, "v_speed": 24.23, "glrat": 1.15 }, { "fl_time": 1.0, "elevation_diff": 5.76, "elevation": 944.5, "distance": 8, "h_speed": 31.41, "v_speed": 20.77, "glrat": 1.51 }, { "fl_time": 1.0, "elevation_diff": 5.77, "elevation": 938.73, "distance": 8, "h_speed": 31.41, "v_speed": 20.77, "glrat": 1.51 }, { "fl_time": 1.0, "elevation_diff": 6.73, "elevation": 932.0, "distance": 7, "h_speed": 28.32, "v_speed": 20.77, "glrat": 1.36 }, { "fl_time": 1.0, "elevation_diff": 5.77, "elevation": 926.23, "distance": 7, "h_speed": 28.32, "v_speed": 20.77, "glrat": 1.36 }, { "fl_time": 1.0, "elevation_diff": 0.0, "elevation": 926.23, "distance": 7, "h_speed": 28.32, "v_speed": 19.04, "glrat": 1.49 }, { "fl_time": 1.0, "elevation_diff": 5.29, "elevation": 920.94, "distance": 7, "h_speed": 28.32, "v_speed": 19.04, "glrat": 1.49 }, { "fl_time": 1.0, "elevation_diff": 4.8, "elevation": 916.14, "distance": 7, "h_speed": 28.32, "v_speed": 17.28, "glrat": 1.64 }, { "fl_time": 1.0, "elevation_diff": 4.33, "elevation": 911.81, "distance": 7, "h_speed": 28.25, "v_speed": 15.59, "glrat": 1.81 }, { "fl_time": 1.0, "elevation_diff": 4.32, "elevation": 907.49, "distance": 7, "h_speed": 28.25, "v_speed": 15.59, "glrat": 1.81 }, { "fl_time": 2.0, "elevation_diff": 9.62, "elevation": 897.87, "distance": 8, "h_speed": 31.91, "v_speed": 15.59, "glrat": 2.05 }, { "fl_time": 1.0, "elevation_diff": 0.0, "elevation": 897.87, "distance": 8, "h_speed": 31.91, "v_speed": 15.59, "glrat": 2.05 }, { "fl_time": 1.0, "elevation_diff": 5.28, "elevation": 892.59, "distance": 9, "h_speed": 32.99, "v_speed": 19.01, "glrat": 1.74 }, { "fl_time": 2.0, "elevation_diff": 12.02, "elevation": 880.57, "distance": 10, "h_speed": 37.06, "v_speed": 20.77, "glrat": 1.78 }, { "fl_time": 1.0, "elevation_diff": 5.77, "elevation": 874.8, "distance": 10, "h_speed": 37.06, "v_speed": 20.77, "glrat": 1.78 }, { "fl_time": 1.0, "elevation_diff": 6.25, "elevation": 868.55, "distance": 10, "h_speed": 36.93, "v_speed": 22.5, "glrat": 1.64 }, { "fl_time": 1.0, "elevation_diff": 6.25, "elevation": 862.3, "distance": 10, "h_speed": 36.93, "v_speed": 22.5, "glrat": 1.64 }, { "fl_time": 1.0, "elevation_diff": 0.0, "elevation": 862.3, "distance": 10, "h_speed": 36.95, "v_speed": 19.01, "glrat": 1.94 }, { "fl_time": 1.0, "elevation_diff": 5.28, "elevation": 857.02, "distance": 10, "h_speed": 36.95, "v_speed": 19.01, "glrat": 1.94 }, { "fl_time": 1.0, "elevation_diff": 4.33, "elevation": 852.69, "distance": 10, "h_speed": 38.8, "v_speed": 15.59, "glrat": 2.49 }, { "fl_time": 1.0, "elevation_diff": 4.33, "elevation": 848.36, "distance": 10, "h_speed": 39.43, "v_speed": 15.59, "glrat": 2.53 }, { "fl_time": 1.0, "elevation_diff": 3.84, "elevation": 844.52, "distance": 11, "h_speed": 39.81, "v_speed": 13.86, "glrat": 2.87 }, { "fl_time": 1.0, "elevation_diff": 3.85, "elevation": 840.67, "distance": 11, "h_speed": 39.81, "v_speed": 13.86, "glrat": 2.87 }, { "fl_time": 1.0, "elevation_diff": 4.8, "elevation": 835.87, "distance": 10, "h_speed": 39.3, "v_speed": 13.86, "glrat": 2.84 }, { "fl_time": 1.0, "elevation_diff": 0.0, "elevation": 835.87, "distance": 10, "h_speed": 39.3, "v_speed": 13.86, "glrat": 2.84 }, { "fl_time": 1.0, "elevation_diff": 5.29, "elevation": 830.58, "distance": 11, "h_speed": 40.01, "v_speed": 19.04, "glrat": 2.1 }, { "fl_time": 1.0, "elevation_diff": 5.29, "elevation": 825.29, "distance": 11, "h_speed": 40.95, "v_speed": 19.04, "glrat": 2.15 }, { "fl_time": 1.0, "elevation_diff": 6.25, "elevation": 819.04, "distance": 11, "h_speed": 41.61, "v_speed": 22.46, "glrat": 1.85 }, { "fl_time": 1.0, "elevation_diff": 6.24, "elevation": 812.8, "distance": 11, "h_speed": 41.76, "v_speed": 22.46, "glrat": 1.86 }, { "fl_time": 1.0, "elevation_diff": 5.77, "elevation": 807.03, "distance": 11, "h_speed": 41.76, "v_speed": 20.77, "glrat": 2.01 }, { "fl_time": 1.0, "elevation_diff": 0.0, "elevation": 807.03, "distance": 11, "h_speed": 41.76, "v_speed": 20.77, "glrat": 2.01 }, { "fl_time": 1.0, "elevation_diff": 6.25, "elevation": 800.78, "distance": 11, "h_speed": 41.76, "v_speed": 22.5, "glrat": 1.86 }, { "fl_time": 1.0, "elevation_diff": 6.25, "elevation": 794.53, "distance": 11, "h_speed": 41.9, "v_speed": 22.5, "glrat": 1.86 }, { "fl_time": 2.0, "elevation_diff": 11.05, "elevation": 783.48, "distance": 12, "h_speed": 44.37, "v_speed": 22.5, "glrat": 1.97 }, { "fl_time": 1.0, "elevation_diff": 5.29, "elevation": 778.19, "distance": 12, "h_speed": 44.37, "v_speed": 19.04, "glrat": 2.33 }, { "fl_time": 1.0, "elevation_diff": 5.29, "elevation": 772.9, "distance": 12, "h_speed": 46.04, "v_speed": 19.04, "glrat": 2.42 }, { "fl_time": 1.0, "elevation_diff": 0.0, "elevation": 772.9, "distance": 12, "h_speed": 46.52, "v_speed": 19.04, "glrat": 2.44 }, { "fl_time": 3.0, "elevation_diff": 17.3, "elevation": 755.6, "distance": 13, "h_speed": 46.8, "v_speed": 22.5, "glrat": 2.08 }, { "fl_time": 1.0, "elevation_diff": 6.25, "elevation": 749.35, "distance": 13, "h_speed": 46.8, "v_speed": 22.5, "glrat": 2.08 }, { "fl_time": 1.0, "elevation_diff": 6.25, "elevation": 743.1, "distance": 12, "h_speed": 44.18, "v_speed": 22.5, "glrat": 1.96 }, { "fl_time": 1.0, "elevation_diff": 5.77, "elevation": 737.33, "distance": 11, "h_speed": 42.69, "v_speed": 20.77, "glrat": 2.06 }, { "fl_time": 1.0, "elevation_diff": 0.0, "elevation": 737.33, "distance": 10, "h_speed": 38.73, "v_speed": 20.77, "glrat": 1.86 }, { "fl_time": 1.0, "elevation_diff": 6.25, "elevation": 731.08, "distance": 10, "h_speed": 38.73, "v_speed": 20.77, "glrat": 1.86 }, { "fl_time": 1.0, "elevation_diff": 5.28, "elevation": 725.8, "distance": 10, "h_speed": 37.38, "v_speed": 19.04, "glrat": 1.96 }, { "fl_time": 1.0, "elevation_diff": 5.29, "elevation": 720.51, "distance": 9, "h_speed": 35.76, "v_speed": 19.04, "glrat": 1.88 }, { "fl_time": 1.0, "elevation_diff": 4.33, "elevation": 716.18, "distance": 9, "h_speed": 35.76, "v_speed": 19.04, "glrat": 1.88 }, { "fl_time": 2.0, "elevation_diff": 9.61, "elevation": 706.57, "distance": 10, "h_speed": 39.14, "v_speed": 19.04, "glrat": 2.06 }, { "fl_time": 1.0, "elevation_diff": 0.0, "elevation": 706.57, "distance": 10, "h_speed": 39.14, "v_speed": 17.32, "glrat": 2.26 }, { "fl_time": 1.0, "elevation_diff": 4.81, "elevation": 701.76, "distance": 10, "h_speed": 39.14, "v_speed": 17.32, "glrat": 2.26 }, { "fl_time": 1.0, "elevation_diff": 4.8, "elevation": 696.96, "distance": 10, "h_speed": 38.89, "v_speed": 17.32, "glrat": 2.25 }, { "fl_time": 1.0, "elevation_diff": 5.29, "elevation": 691.67, "distance": 10, "h_speed": 38.89, "v_speed": 19.04, "glrat": 2.04 }, { "fl_time": 1.0, "elevation_diff": 5.77, "elevation": 685.9, "distance": 11, "h_speed": 39.65, "v_speed": 19.04, "glrat": 2.08 }, { "fl_time": 1.0, "elevation_diff": 4.8, "elevation": 681.1, "distance": 11, "h_speed": 40.62, "v_speed": 17.32, "glrat": 2.35 }, { "fl_time": 1.0, "elevation_diff": 4.81, "elevation": 676.29, "distance": 11, "h_speed": 40.62, "v_speed": 17.32, "glrat": 2.35 }, { "fl_time": 1.0, "elevation_diff": 0.0, "elevation": 676.29, "distance": 11, "h_speed": 40.12, "v_speed": 17.32, "glrat": 2.32 }, { "fl_time": 1.0, "elevation_diff": 5.77, "elevation": 670.52, "distance": 11, "h_speed": 40.06, "v_speed": 19.04, "glrat": 2.1 }, { "fl_time": 1.0, "elevation_diff": 5.29, "elevation": 665.23, "distance": 11, "h_speed": 40.06, "v_speed": 19.04, "glrat": 2.1 }, { "fl_time": 1.0, "elevation_diff": 5.28, "elevation": 659.95, "distance": 11, "h_speed": 39.65, "v_speed": 19.01, "glrat": 2.09 }, { "fl_time": 1.0, "elevation_diff": 4.81, "elevation": 655.14, "distance": 10, "h_speed": 39.05, "v_speed": 19.01, "glrat": 2.05 }, { "fl_time": 1.0, "elevation_diff": 5.29, "elevation": 649.85, "distance": 10, "h_speed": 39.05, "v_speed": 19.01, "glrat": 2.05 }, { "fl_time": 1.0, "elevation_diff": 0.0, "elevation": 649.85, "distance": 10, "h_speed": 39.23, "v_speed": 19.01, "glrat": 2.06 }, { "fl_time": 2.0, "elevation_diff": 9.13, "elevation": 640.72, "distance": 12, "h_speed": 45.9, "v_speed": 20.77, "glrat": 2.21 }, { "fl_time": 1.0, "elevation_diff": 5.77, "elevation": 634.95, "distance": 12, "h_speed": 45.9, "v_speed": 20.77, "glrat": 2.21 }, { "fl_time": 1.0, "elevation_diff": 6.25, "elevation": 628.7, "distance": 12, "h_speed": 45.9, "v_speed": 22.5, "glrat": 2.04 }, { "fl_time": 1.0, "elevation_diff": 6.25, "elevation": 622.45, "distance": 12, "h_speed": 43.66, "v_speed": 22.5, "glrat": 1.94 }, { "fl_time": 1.0, "elevation_diff": 7.69, "elevation": 614.76, "distance": 11, "h_speed": 41.89, "v_speed": 22.5, "glrat": 1.86 }, { "fl_time": 1.0, "elevation_diff": 0.0, "elevation": 614.76, "distance": 10, "h_speed": 39.33, "v_speed": 22.5, "glrat": 1.75 }, { "fl_time": 1.0, "elevation_diff": 7.69, "elevation": 607.07, "distance": 9, "h_speed": 34.14, "v_speed": 25.96, "glrat": 1.32 }, { "fl_time": 1.0, "elevation_diff": 7.21, "elevation": 599.86, "distance": 9, "h_speed": 34.14, "v_speed": 25.96, "glrat": 1.32 }, { "fl_time": 1.0, "elevation_diff": 7.21, "elevation": 592.65, "distance": 9, "h_speed": 34.59, "v_speed": 25.96, "glrat": 1.33 }, { "fl_time": 1.0, "elevation_diff": 7.69, "elevation": 584.96, "distance": 11, "h_speed": 41.94, "v_speed": 27.68, "glrat": 1.52 }, { "fl_time": 1.0, "elevation_diff": 8.17, "elevation": 576.79, "distance": 14, "h_speed": 52.85, "v_speed": 27.68, "glrat": 1.91 }, { "fl_time": 1.0, "elevation_diff": 0.0, "elevation": 576.79, "distance": 16, "h_speed": 60.05, "v_speed": 27.68, "glrat": 2.17 }, { "fl_time": 1.0, "elevation_diff": 8.65, "elevation": 568.14, "distance": 17, "h_speed": 63.5, "v_speed": 31.14, "glrat": 2.04 }, { "fl_time": 1.0, "elevation_diff": 9.61, "elevation": 558.53, "distance": 17, "h_speed": 63.5, "v_speed": 34.6, "glrat": 1.84 }, { "fl_time": 1.0, "elevation_diff": 9.62, "elevation": 548.91, "distance": 17, "h_speed": 63.5, "v_speed": 34.6, "glrat": 1.84 }, { "fl_time": 1.0, "elevation_diff": 9.61, "elevation": 539.3, "distance": 17, "h_speed": 62.81, "v_speed": 34.6, "glrat": 1.82 }, { "fl_time": 1.0, "elevation_diff": 9.13, "elevation": 530.17, "distance": 16, "h_speed": 60.55, "v_speed": 32.87, "glrat": 1.84 }, { "fl_time": 1.0, "elevation_diff": 8.17, "elevation": 522.0, "distance": 16, "h_speed": 58.07, "v_speed": 29.41, "glrat": 1.97 }, { "fl_time": 1.0, "elevation_diff": 0.0, "elevation": 522.0, "distance": 15, "h_speed": 56.61, "v_speed": 29.41, "glrat": 1.92 }, { "fl_time": 1.0, "elevation_diff": 8.65, "elevation": 513.35, "distance": 14, "h_speed": 52.8, "v_speed": 29.41, "glrat": 1.8 }, { "fl_time": 1.0, "elevation_diff": 7.21, "elevation": 506.14, "distance": 13, "h_speed": 49.32, "v_speed": 29.41, "glrat": 1.68 }, { "fl_time": 1.0, "elevation_diff": 9.14, "elevation": 497.0, "distance": 13, "h_speed": 49.32, "v_speed": 32.9, "glrat": 1.5 }, { "fl_time": 2.0, "elevation_diff": 20.67, "elevation": 476.33, "distance": 14, "h_speed": 51.82, "v_speed": 32.9, "glrat": 1.58 }, { "fl_time": 1.0, "elevation_diff": 0.0, "elevation": 476.33, "distance": 14, "h_speed": 51.82, "v_speed": 32.9, "glrat": 1.58 }, { "fl_time": 2.0, "elevation_diff": 24.03, "elevation": 452.3, "distance": 14, "h_speed": 51.82, "v_speed": 45.0, "glrat": 1.15 }, { "fl_time": 1.0, "elevation_diff": 12.5, "elevation": 439.8, "distance": 11, "h_speed": 41.86, "v_speed": 45.0, "glrat": 0.93 }, { "fl_time": 1.0, "elevation_diff": 12.97, "elevation": 426.83, "distance": 10, "h_speed": 38.82, "v_speed": 46.69, "glrat": 0.83 }, { "fl_time": 1.0, "elevation_diff": 14.42, "elevation": 412.41, "distance": 10, "h_speed": 38.82, "v_speed": 51.91, "glrat": 0.75 }, { "fl_time": 1.0, "elevation_diff": 16.35, "elevation": 396.06, "distance": 12, "h_speed": 44.96, "v_speed": 51.91, "glrat": 0.87 }, { "fl_time": 1.0, "elevation_diff": 0.0, "elevation": 396.06, "distance": 14, "h_speed": 53.47, "v_speed": 51.91, "glrat": 1.03 }, { "fl_time": 1.0, "elevation_diff": 16.82, "elevation": 379.24, "distance": 16, "h_speed": 57.6, "v_speed": 60.55, "glrat": 0.95 }, { "fl_time": 2.0, "elevation_diff": 29.32, "elevation": 349.92, "distance": 16, "h_speed": 57.6, "v_speed": 60.55, "glrat": 0.95 }, { "fl_time": 1.0, "elevation_diff": 12.02, "elevation": 337.9, "distance": 16, "h_speed": 57.6, "v_speed": 60.55, "glrat": 0.95 }, { "fl_time": 2.0, "elevation_diff": 20.18, "elevation": 317.72, "distance": 16, "h_speed": 57.6, "v_speed": 60.55, "glrat": 0.95 }, { "fl_time": 1.0, "elevation_diff": 0.0, "elevation": 317.72, "distance": 9, "h_speed": 33.84, "v_speed": 39.82, "glrat": 0.85 }, { "fl_time": 1.0, "elevation_diff": 11.06, "elevation": 306.66, "distance": 9, "h_speed": 33.84, "v_speed": 39.82, "glrat": 0.85 }, { "fl_time": 1.0, "elevation_diff": 12.5, "elevation": 294.16, "distance": 10, "h_speed": 36.36, "v_speed": 45.0, "glrat": 0.81 }, { "fl_time": 1.0, "elevation_diff": 13.93, "elevation": 280.23, "distance": 11, "h_speed": 40.61, "v_speed": 48.46, "glrat": 0.84 }, { "fl_time": 1.0, "elevation_diff": 13.46, "elevation": 266.77, "distance": 12, "h_speed": 46.08, "v_speed": 48.46, "glrat": 0.95 }, { "fl_time": 1.0, "elevation_diff": 13.46, "elevation": 253.31, "distance": 12, "h_speed": 46.08, "v_speed": 48.46, "glrat": 0.95 }, { "fl_time": 1.0, "elevation_diff": 12.02, "elevation": 241.29, "distance": 12, "h_speed": 46.08, "v_speed": 43.27, "glrat": 1.06 }, { "fl_time": 1.0, "elevation_diff": 0.0, "elevation": 241.29, "distance": 12, "h_speed": 46.36, "v_speed": 38.05, "glrat": 1.22 }, { "fl_time": 1.0, "elevation_diff": 10.57, "elevation": 230.72, "distance": 12, "h_speed": 46.36, "v_speed": 38.05, "glrat": 1.22 }, { "fl_time": 1.0, "elevation_diff": 8.65, "elevation": 222.07, "distance": 14, "h_speed": 51.01, "v_speed": 31.14, "glrat": 1.64 }, { "fl_time": 1.0, "elevation_diff": 6.73, "elevation": 215.34, "distance": 15, "h_speed": 54.62, "v_speed": 31.14, "glrat": 1.75 }, { "fl_time": 3.0, "elevation_diff": 12.5, "elevation": 202.84, "distance": 15, "h_speed": 54.62, "v_speed": 31.14, "glrat": 1.75 }, { "fl_time": 1.0, "elevation_diff": 6.25, "elevation": 196.59, "distance": 12, "h_speed": 46.71, "v_speed": 24.23, "glrat": 1.93 }, { "fl_time": 1.0, "elevation_diff": 6.73, "elevation": 189.86, "distance": 10, "h_speed": 38.83, "v_speed": 24.23, "glrat": 1.6 }, { "fl_time": 1.0, "elevation_diff": 7.69, "elevation": 182.17, "distance": 9, "h_speed": 34.89, "v_speed": 24.23, "glrat": 1.44 }, { "fl_time": 1.0, "elevation_diff": 6.73, "elevation": 175.44, "distance": 9, "h_speed": 34.01, "v_speed": 24.23, "glrat": 1.4 }, { "fl_time": 1.0, "elevation_diff": 8.17, "elevation": 167.27, "distance": 9, "h_speed": 34.01, "v_speed": 29.41, "glrat": 1.16 }, { "fl_time": 2.0, "elevation_diff": 8.17, "elevation": 159.1, "distance": 9, "h_speed": 35.96, "v_speed": 29.41, "glrat": 1.22 }, { "fl_time": 1.0, "elevation_diff": 9.61, "elevation": 149.49, "distance": 9, "h_speed": 35.96, "v_speed": 32.9, "glrat": 1.09 }, { "fl_time": 1.0, "elevation_diff": 9.14, "elevation": 140.35, "distance": 10, "h_speed": 36.19, "v_speed": 32.9, "glrat": 1.1 }, { "fl_time": 1.0, "elevation_diff": 10.09, "elevation": 130.26, "distance": 10, "h_speed": 37.11, "v_speed": 32.9, "glrat": 1.13 }, { "fl_time": 1.0, "elevation_diff": 9.13, "elevation": 121.13, "distance": 10, "h_speed": 37.11, "v_speed": 32.9, "glrat": 1.13 }, { "fl_time": 1.0, "elevation_diff": 9.14, "elevation": 111.99, "distance": 10, "h_speed": 37.11, "v_speed": 32.9, "glrat": 1.13 }, { "fl_time": 2.0, "elevation_diff": 8.17, "elevation": 103.82, "distance": 10, "h_speed": 37.11, "v_speed": 32.87, "glrat": 1.13 }, { "fl_time": 1.0, "elevation_diff": 9.13, "elevation": 94.69, "distance": 10, "h_speed": 36.8, "v_speed": 32.87, "glrat": 1.12 }, { "fl_time": 1.0, "elevation_diff": 8.17, "elevation": 86.52, "distance": 10, "h_speed": 36.8, "v_speed": 29.41, "glrat": 1.25 }, { "fl_time": 1.0, "elevation_diff": 6.73, "elevation": 79.79, "distance": 10, "h_speed": 37.0, "v_speed": 24.23, "glrat": 1.53 }, { "fl_time": 1.0, "elevation_diff": 6.73, "elevation": 73.06, "distance": 10, "h_speed": 37.0, "v_speed": 24.23, "glrat": 1.53 }, { "fl_time": 1.0, "elevation_diff": 6.25, "elevation": 66.81, "distance": 10, "h_speed": 36.92, "v_speed": 22.5, "glrat": 1.64 }, { "fl_time": 1.0, "elevation_diff": 0.0, "elevation": 66.81, "distance": 10, "h_speed": 36.92, "v_speed": 22.5, "glrat": 1.64 }, { "fl_time": 1.0, "elevation_diff": 6.25, "elevation": 60.56, "distance": 10, "h_speed": 37.07, "v_speed": 22.5, "glrat": 1.65 }, { "fl_time": 1.0, "elevation_diff": 7.69, "elevation": 52.87, "distance": 10, "h_speed": 37.13, "v_speed": 27.68, "glrat": 1.34 }];
+        </script>
+
+        <!-- Анимация трека -->
+        <script type="text/javascript">
+            var trackLength = charts_data.length;
+            var trackTimeShift = 0.0;
+            var curTimeIndex = 0;
+            
+            var trackDataElevation;
+            var trackDataElevationMax = 0;
+            var trackDataHSpeed;
+            var trackDataHSpeedMax = 0;
+
+            function getMaxValue(arr) {
+                var max;
+                $.each(arr, function (i, val) {
+                    if (!max || val.value > max)
+                        max = val.value;
+                });
+                return max;
+            }
+
+            function makePlainTrackArrays() {
+
+                var time = 0.0;
+                trackDataElevation = new Array(trackLength);
+                trackDataHSpeed = new Array(trackLength);
+
+                for (var i = 0; i < trackLength; i++) {
+                    var record = charts_data[i];
+                    time += record["fl_time"];
+                    trackDataElevation[i] = { "time": time, "value": record.elevation };
+                    trackDataHSpeed[i] = { "time": time, "value": record.h_speed };
+                }
+                trackDataElevationMax = getMaxValue(trackDataElevation);
+                trackDataHSpeedMax = getMaxValue(trackDataHSpeed);
+            }
+
+            function getTrackParameterOnTime(array, time) {                                
+                if (array[0].time > time) return 0;
+
+                var nextTime = 1;
+                while (nextTime > 0) {
+                    if (!array[curTimeIndex]) {
+                        console.log('out of: ' + curTimeIndex + ', time is: ' + time);
+                        return 0;
+                    }
+                    var curTime = array[curTimeIndex].time;
+                    var nextTime = (curTimeIndex + 1) < trackLength ? array[curTimeIndex + 1].time : -1;
+
+                    if (time >= curTime && (time <= nextTime || nextTime < 0))
+                        return array[curTimeIndex].value;
+
+                    curTimeIndex++;
+                }
+                return 0;
+            }
+
+            makePlainTrackArrays();
+        </script>
+
+        <!-- Источник (Youtube или Vimeo), размер экрана -->
+        <script type="text/javascript">
+            var srcVideoId = '98279296'; // 'RsV3bGPMTXo' - пример с Youtube
+            var vimeoScrWidth = '800';
+            var vimeoScrHeight = '600';
+            var embedYoutube = false;
+            var embedVimeo = true;
+        </script>
+
+        <!-- Скрипты Youtube -->
+        <script type="text/javascript">
+            var ytplayer = 0;
+            var done = false;
+            var tag = 0;
+            var player;
+            var duration = 0;
+
+            function onYouTubeIframeAPIReady() {
+                player = new YT.Player('player', {
+                    height: vimeoScrHeight,
+                    width: vimeoScrWidth,
+                    videoId: srcVideoId,
+                    events: {
+                        'onReady': onPlayerReady,
+                        'onStateChange': onPlayerStateChange
+                    }
+                });
+            }
+
+            function onPlayerReady(event) {
+                event.target.playVideo();
+            }
+
+            function onPlayerStateChange(event) {
+                if (event.data == YT.PlayerState.PLAYING && !done) {
+                    duration = player.getDuration();
+
+                    setInterval(function () {
+                        var curTime = player.getCurrentTime();
+                        if (duration <= 0) return;
+                        //var percent = Math.round(100 * curTime / duration);
+                        updateProgress(curTime);
+                    }, 250);
+                    done = true;
+                }
+            }
+
+            function embedYoutubePlayer() {
+                tag = document.createElement('script');
+                tag.src = "https://www.youtube.com/iframe_api";
+                var firstScriptTag = document.getElementsByTagName('script')[0];
+                firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+            }
+        </script>
+
+        <!-- Скрипты Vimeo -->
+        <script type="text/javascript">
+            function embedVimeoPlayer() {
+                var destDiv = $('div#vimeoPlayer');
+                destDiv.html('<iframe src="//player.vimeo.com/video/' + srcVideoId +
+                    '?api=1" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen ' +
+                    'width="' + vimeoScrWidth + '" height="' + vimeoScrHeight + '"></iframe>');
+
+                var f = $('div#vimeoPlayer iframe'),
+                    url = 'http://player.vimeo.com',
+                    status = $('.status');
+
+                // Listen for messages from the player
+                if (window.addEventListener) {
+                    window.addEventListener('message', onMessageReceived, false);
+                }
+                else {
+                    window.attachEvent('onmessage', onMessageReceived, false);
+                }
+
+                // Handle messages received from the player
+                function onMessageReceived(e) {
+                    var data = JSON.parse(e.data);
+                    
+                    if (data.method == 'getDuration') {
+                        duration = data.value;
+                    }
+
+                    switch (data.event) {
+                        case 'ready':
+                            onReady();
+                            break;
+
+                        case 'playProgress':
+                            onPlayProgress(data.data);
+                            break;
+
+                        case 'pause':
+                            onPause();
+                            break;
+                    }
+                }
+
+                // Call the API when a button is pressed
+                //$('button').on('click', function () {
+                //    post($(this).text().toLowerCase());
+                //});
+
+                // Helper function for sending a message to the player
+                function post(action, value) {
+                    var data = { method: action };
+
+                    if (value) {
+                        data.value = value;
+                    }
+
+                    f[0].contentWindow.postMessage(JSON.stringify(data), url);
+                }                
+
+                function onReady() {
+                    console.log('ready');
+
+                    post('addEventListener', 'pause');
+                    post('addEventListener', 'finish');
+                    post('addEventListener', 'playProgress');
+
+                    post('getDuration');
+                }
+
+                function onPause() {
+                    status.text('paused');
+                }
+
+                function onFinish() {
+                }
+
+                function onPlayProgress(data) {
+                    if (duration == 0) return;
+                    updateProgress(data.seconds);//Math.round(100 * data.seconds / duration));
+                }
+            }
+        </script>
+
+        <!-- Highcharts -->
+        <script type="text/javascript">
+            var gaugeElevation,
+                gaugeHSpeed;
+
+            function addSpeedometer(targetDivId, title, maxValue, inverseColors) {
+                if (arguments.length < 4)
+                    inverseColors = false;
+
+                var colors = ['#55BF3B', '#DDDF0D', '#DF5353'];
+                if (inverseColors)
+                    colors = ['#DF5353', '#DDDF0D', '#55BF3B'];
+
+                $('div#' + targetDivId).highcharts({
+                    chart: {
+                        type: 'gauge',
+                        plotBackgroundColor: null,
+                        plotBackgroundImage: null,
+                        plotBorderWidth: 0,
+                        plotShadow: false
+                    },
+
+                    title: { text: title },
+
+                    pane: {
+                        startAngle: -150,
+                        endAngle: 150,
+                        background: [{
+                            backgroundColor: {
+                                linearGradient: { x1: 0, y1: 0, x2: 0, y2: 1 },
+                                stops: [[0, '#FFF'], [1, '#333']]
+                            },
+                            borderWidth: 0,
+                            outerRadius: '109%'
+                        }, {
+                            backgroundColor: {
+                                linearGradient: { x1: 0, y1: 0, x2: 0, y2: 1 },
+                                stops: [[0, '#333'], [1, '#FFF']]
+                            },
+                            borderWidth: 1,
+                            outerRadius: '107%'
+                        }, {
+                            // default background
+                        }, {
+                            backgroundColor: '#DDD',
+                            borderWidth: 0,
+                            outerRadius: '105%',
+                            innerRadius: '103%'
+                        }]
+                    },
+
+                    // the value axis
+                    yAxis: {
+                        min: 0,
+                        max: maxValue,
+
+                        minorTickInterval: 'auto',
+                        minorTickWidth: 1,
+                        minorTickLength: 10,
+                        minorTickPosition: 'inside',
+                        minorTickColor: '#666',
+
+                        tickPixelInterval: 30,
+                        tickWidth: 2,
+                        tickPosition: 'inside',
+                        tickLength: 10,
+                        tickColor: '#666',
+                        labels: {
+                            step: 2,
+                            rotation: 'auto'
+                        },
+                        title: {
+                            text: 'km/h'
+                        },
+                        plotBands: [{
+                            from: 0,
+                            to: Math.round(maxValue/4),
+                            color: colors[0]
+                        }, {
+                            from: Math.round(maxValue / 4),
+                            to: Math.round(maxValue / 2),
+                            color: colors[1]
+                        }, {
+                            from: Math.round(maxValue / 2),
+                            to: Math.round(maxValue),
+                            color: colors[2]
+                        }]
+                    },
+
+                    series: [{
+                        name: 'Speed',
+                        data: [80],
+                        tooltip: {
+                            valueSuffix: ' km/h'
+                        }
+                    }]
+                });
+
+                return $('div#' + targetDivId).highcharts();
+            }
+                        
+            function updateGaugeValue(gauge, val) {
+                var point = gauge.series[0].points[0];
+                point.update(val);
+            }
+        </script>
+
+        <!-- Общие скрипты -->
+        <script type="text/javascript">            
+            var duration = 0;
+            
+            function updateProgress(time) {
+                var altitude = getTrackParameterOnTime(trackDataElevation, time);
+                var hSpeed = getTrackParameterOnTime(trackDataHSpeed, time);
+
+                updateGaugeValue(gaugeElevation, altitude);
+                updateGaugeValue(gaugeHSpeed, hSpeed);
+            }
+
+            $(function () {
+                if (embedYoutube)
+                    embedYoutubePlayer();
+                if (embedVimeo)
+                    embedVimeoPlayer();
+
+                gaugeElevation = addSpeedometer('gaugeElevation', 'Высота', 4000, true);
+                gaugeHSpeed = addSpeedometer('gaugeHSpeed', 'Скорость', trackDataHSpeedMax);
+            });
+    </script>
+    </head>
+
+    <body>
+        <!-- Youtube -->
+        <div id="player"></div>
+        <!-- ... or Vimeo -->
+        <div id="vimeoPlayer"></div>
+
+        <table>
+            <tr>
+                <td style="width:300px"><div id="gaugeElevation" style="min-width: 120px; max-width: 250px; height: 250px; margin: 0 auto"></div></td>
+                <td style="width:300px"><div id="gaugeHSpeed" style="min-width: 120px; max-width: 250px; height: 250px; margin: 0 auto"></div></td>
+            </tr>
+        </table>
+    </body>
+</html>
