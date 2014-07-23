@@ -2,6 +2,7 @@
 <html>
     <head>
         <title>Gauge test</title>
+        <link rel="stylesheet" type="text/css" href="css/button.css">
         <script src="js/jquery-1.6.2.min.js"></script>    
         <script src="js/highcharts.js"></script>
         <script src="js/highcharts-more.js"></script>
@@ -321,16 +322,102 @@
             }
         </script>
 
+        <!-- Highcharts - график по данным трека -->
+        <script type="text/javascript">
+            function addTrackChart(targetDivId, yAxisTitle, seriesName, title, trackDataArray) {
+                var data = new Array(trackDataArray.length);
+                for (var i = 0; i < trackDataArray.length; i++) {
+                    data[i] = [trackDataArray[i].time, trackDataArray[i].value];
+                }
+
+                $('div#' + targetDivId).highcharts({
+                    chart: {
+                        type: 'line',
+                        zoomType: 'xy'
+                    },
+
+                    title: { text: title, x: -20 },
+
+                    xAxis: {
+                        title: {
+                            enabled: true,
+                            text: 'time, s'
+                        },
+                        startOnTick: true,
+                        endOnTick: true,
+                        showLastLabel: true
+                    },
+
+                    yAxis: {
+                        title: {
+                            text: yAxisTitle
+                        },
+                        plotLines: [{
+                            value: 0,
+                            width: 1,
+                            color: '#808080'
+                        }]
+                    },
+
+                    series: [{
+                        name: seriesName,
+                        data: data, //[[0.0, 4000], [1.0, 4003], [2.0, 4003], [3.0, 3995], [4.0, 3982]],
+                        color: 'rgba(223, 83, 83, .5)',
+                        events: {
+                            click: function (event) {
+                                if (event.point === 'undefined' ||
+                                    event.point.x === 'undefined' ||
+                                    !event.point.x) return;
+                                chosenTrackSecond = event.point.x;
+                            }
+                        }
+                    }]
+                });
+            }
+        
+            var chartPool =
+                [
+                    {
+                        "Code": "Elevation", "title": "Elevation",
+                        "trackDataArray": trackDataElevation, "seriesName": "Elevation", "yAxisTitle": "Elevation, m"
+                    },
+                    {
+                        "Code": "HSpeed", "title": "Horizontal Speed",
+                        "trackDataArray": trackDataHSpeed, "seriesName": "Speed", "yAxisTitle": "H. Speed, km/h"
+                    },
+                ];
+
+            function addTrackChartByCode(code) {
+                var chartItem = $.grep(chartPool, function (value, index) { return value.Code == code; })[0];
+                console.log(chartItem + ', code:' + code);
+                addTrackChart('chartTrack', chartItem.yAxisTitle, chartItem.seriesName, chartItem.title, chartItem.trackDataArray);
+            }
+        </script>
+
         <!-- Общие скрипты -->
         <script type="text/javascript">            
             var duration = 0;
+            var lastPlayedTime = 0;
+            var chosenTrackSecond = 0;
             
             function updateProgress(time) {
+                lastPlayedTime = time;
                 var altitude = getTrackParameterOnTime(trackDataElevation, time);
                 var hSpeed = getTrackParameterOnTime(trackDataHSpeed, time);
 
                 updateGaugeValue(gaugeElevation, altitude);
                 updateGaugeValue(gaugeHSpeed, hSpeed);
+            }
+
+            function synchVideoAndTrack(synchStartNotEnd) {
+                var msg = 'Видео остановлено на ' + lastPlayedTime + ' секунд, точка трека смещена на ' +
+                    chosenTrackSecond + ' секунд. Синхронизировать ';
+                if (synchStartNotEnd)
+                    msg += ' начало трека?';
+                else
+                    msg += ' конец трека?';
+
+                alert(msg);
             }
 
             $(function () {
@@ -341,7 +428,9 @@
 
                 gaugeElevation = addSpeedometer('gaugeElevation', 'Высота', 4000, true);
                 gaugeHSpeed = addSpeedometer('gaugeHSpeed', 'Скорость', trackDataHSpeedMax);
-            });
+
+                addTrackChartByCode('Elevation');
+            });            
     </script>
     </head>
 
@@ -351,11 +440,37 @@
         <!-- ... or Vimeo -->
         <div id="vimeoPlayer"></div>
 
+        <!-- Спидометры -->
         <table>
             <tr>
-                <td style="width:300px"><div id="gaugeElevation" style="min-width: 120px; max-width: 250px; height: 250px; margin: 0 auto"></div></td>
-                <td style="width:300px"><div id="gaugeHSpeed" style="min-width: 120px; max-width: 250px; height: 250px; margin: 0 auto"></div></td>
+                <td>
+                    <div style="float:left;">
+                        <a href="javascript:void(0);" onclick="$('div#panelSettings').toggle();"><img src="img/ico_sets.png" /></a>
+                    </div>
+
+                    <div id="panelSettings" style="display: none; float:left; padding: 6px;">
+                        <a class="linkLikeButton" href="javyascript:void(0);" onclick="synchVideoAndTrack(true)">Синхр. начало</a>
+                        <br /><br />
+                        <a class="linkLikeButton" href="javascript:void(0);" onclick="synchVideoAndTrack(false)">Синхр. конец</a>
+                    </div>
+                </td>
+                <td>
+                    <table>
+                        <tr>
+                            <td style="width:300px"><div id="gaugeElevation" style="min-width: 120px; max-width: 250px; height: 250px; margin: 0 auto"></div></td>
+                            <td style="width:300px"><div id="gaugeHSpeed" style="min-width: 120px; max-width: 250px; height: 250px; margin: 0 auto"></div></td>
+                        </tr>
+                    </table>
+                </td>
             </tr>
-        </table>
+        </table>        
+    
+        <!-- График для синхронизации видео / трека -->
+        <select onchange="addTrackChartByCode(this.options[this.selectedIndex].value)">
+            <option value="Elevation">Elevation</option>
+            <option value="HSpeed">Horizontal Speed</option>
+        </select>
+
+        <div id="chartTrack" style="min-width: 400px; max-width: 1800px; min-height: 250px; max-height: 800px; margin: 0 auto"></div>
     </body>
 </html>
