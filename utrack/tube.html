@@ -15,6 +15,11 @@
 
         <!-- Анимация трека -->
         <script type="text/javascript">
+            // начало и конец "события" на видео...
+            var timeVidStart = 0, timeVidEnd = 0;
+            // ... и в данных трека
+            var timeTrackStart = 0, timeTrackEnd = 0;
+
             var trackLength = charts_data.length;
             var trackTimeShift = 0.0;
             var curTimeIndex = 0;
@@ -38,6 +43,8 @@
                 var time = 0.0;
                 trackDataElevation = new Array(trackLength);
                 trackDataHSpeed = new Array(trackLength);
+                if (timeTrackEnd == 0)
+                    timeTrackEnd = charts_data[charts_data.length - 1].fl_time;
 
                 for (var i = 0; i < trackLength; i++) {
                     var record = charts_data[i];
@@ -49,7 +56,7 @@
                 trackDataHSpeedMax = getMaxValue(trackDataHSpeed);
             }
 
-            function getTrackParameterOnTime(array, time) {                                
+            function getTrackParameterOnTime(array, time) {
                 if (array[0].time > time) return 0;
 
                 var nextTime = 1;
@@ -113,6 +120,8 @@
             function onPlayerStateChange(event) {
                 if (event.data == YT.PlayerState.PLAYING && !done) {
                     duration = player.getDuration();
+                    if (duration > 0 && timeVidEnd == 0)
+                        timeVidEnd = duration;
 
                     setInterval(function () {
                         var curTime = player.getCurrentTime();
@@ -158,6 +167,8 @@
                     
                     if (data.method == 'getDuration') {
                         duration = data.value;
+                        if (duration > 0 && timeVidEnd == 0)
+                            timeVidEnd = duration;
                     }
 
                     switch (data.event) {
@@ -399,12 +410,26 @@
             var duration = 0;
             var lastPlayedTime = 0;
             var chosenTrackSecond = 0;
-            
+                        
             function updateProgress(time) {
                 lastPlayedTime = time;
+
+                // преобразовать время с учетом синхронизации
+                if (timeVidEnd > 0 && timeTrackEnd > 0) {
+                    var str = 'src:' + time + ', ';
+
+                    var timeRel = (time - timeVidStart) / (timeVidEnd - timeVidStart);
+                    time = timeRel * (timeTrackEnd - timeTrackStart) + timeTrackStart;
+
+                    str = 'rel:' + timeRel + ', rst:' + time;
+
+                    $('td#cellTimeRel').html(str);
+                }
+                                
                 var altitude = getTrackParameterOnTime(trackDataElevation, time);
                 var hSpeed = getTrackParameterOnTime(trackDataHSpeed, time);
 
+                // обновить "спидометры"
                 updateGaugeValue(gaugeElevation, altitude);
                 updateGaugeValue(gaugeHSpeed, hSpeed);
             }
@@ -417,7 +442,15 @@
                 else
                     msg += ' конец трека?';
 
-                alert(msg);
+                if (!confirm(msg)) return;
+
+                if (synchStartNotEnd) {
+                    timeTrackStart = chosenTrackSecond;
+                    timeVidStart = lastPlayedTime;
+                } else {
+                    timeTrackEnd = chosenTrackSecond;
+                    timeVidEnd = lastPlayedTime;
+                }
             }
 
             $(function () {
@@ -459,6 +492,7 @@
                         <tr>
                             <td style="width:300px"><div id="gaugeElevation" style="min-width: 120px; max-width: 250px; height: 250px; margin: 0 auto"></div></td>
                             <td style="width:300px"><div id="gaugeHSpeed" style="min-width: 120px; max-width: 250px; height: 250px; margin: 0 auto"></div></td>
+                            <td id="cellTimeRel"></td>
                         </tr>
                     </table>
                 </td>
