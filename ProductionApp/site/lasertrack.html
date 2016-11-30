@@ -5,29 +5,8 @@
 	<meta charset='utf-8' />
 	<title>Laser Track</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-	<style>
-		body {
-			margin-top:2%;
-			text-align:center;
-			color:black;
-			background-color:white;
-		}
-		video { 
-			position:absolute;
-			visibility:hidden;
-		}
-		canvas { border:2px solid blue;}
-		button {
-			border:none;
-			display:block;
-			padding:0.5em 1em;
-			margin:1% auto 0;
-			cursor:pointer;
-			color:#fff;
-			background-color:#9f361b;
-		}
-		button:active { background-color:#e44d26; }
-	</style>
+	<link href="css/defstyles.css" rel="stylesheet" />
+ 
 	
     <script src="js/point.js"></script>
     <script src="js/spot.js"></script>
@@ -50,6 +29,8 @@
                 localStorage["patGreen"] = spotParams.patGreen;
                 localStorage["patBlue"] = spotParams.patBlue;
             }
+            crossModeIsOn = !crossModeIsOn;
+            document.getElementById('btnCrossMode').className = crossModeIsOn ? 'button-inactive' : 'button';
         }
 
         
@@ -64,9 +45,6 @@
             calibrationContext = calibrationCanvas.getContext('2d');
             calibrationContext.putImageData(imageData, 0, 0);
         }
-
-        
-
 
         function onLoad() {
             calibrationCanvas = document.getElementById('calibrationCanvas');
@@ -159,7 +137,7 @@
 <body onload="onLoad()">
 	<video id='v'></video>	
 	<canvas id='c'></canvas>
-	<button id='btnCrossMode'>Toggle Cross</button>
+	<button id='btnCrossMode' class='button'>Toggle Cross</button>
     <br />
     <br />
     <br />
@@ -188,7 +166,7 @@
             </td>            
         </tr>
     </table>
-    <button id='btnScreenShot'>Screen Shot</button>
+    <button id='btnScreenShot' class='button'>Screen Shot</button>
     <canvas id='calibrationCanvas'></canvas>
 </body>
 </html>

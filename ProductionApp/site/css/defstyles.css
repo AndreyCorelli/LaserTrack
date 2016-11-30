@@ -1,0 +1,41 @@
+body {
+    margin-top:2%;
+    text-align:center;
+    color:black;
+    background-color:white;
+}
+
+video { 
+    position:absolute;
+    visibility:hidden;
+}
+
+canvas { border:2px solid blue;}
+
+.button {
+    border:none;
+    display:block;
+    padding:0.5em 1em;
+    margin:1% auto 0;
+    cursor:pointer;
+    color:#fff;
+    background-color:#9f361b;
+}
+
+.button:active {
+    background-color:#e44d26;
+}
+
+.button-inactive {
+    border:none;
+    display:block;
+    padding:0.5em 1em;
+    margin:1% auto 0;
+    cursor:pointer;
+    color:#fff;
+    background-color:#5f463b;
+}
+
+.button-inactive:active {
+    background-color:#e44d26;
+}
