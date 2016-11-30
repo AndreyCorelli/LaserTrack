@@ -43,9 +43,9 @@ function calibrationCanvasOnClick(e) {
     var w = imgBits.width;
     var ind = (pos.x + pos.y * w) * stride;
 
-    var red = imgBits[ind];
-    var green = imgBits[ind + 1];
-    var blue = imgBits[ind + 2];
+    var red = imgBits.data[ind];
+    var green = imgBits.data[ind + 1];
+    var blue = imgBits.data[ind + 2];
     $('#spotRed').val(red);
     $('#spotGreen').val(green);
     $('#spotBlue').val(blue);
@@ -54,7 +54,7 @@ function calibrationCanvasOnClick(e) {
 function getCursorPosition(e) {
     var rect = calibrationCanvas.getBoundingClientRect();
     return {
-        x: e.clientX - rect.left,
-        y: e.clientY - rect.top
+        x: Math.round(e.clientX - rect.left, 0),
+        y: Math.round(e.clientY - rect.top, 0)
     };
 }
