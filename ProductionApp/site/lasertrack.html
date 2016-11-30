@@ -8,6 +8,7 @@
 	<link href="css/defstyles.css" rel="stylesheet" />
  
 	
+    <script src="js/jquery-3.1.1.min.js"></script>
     <script src="js/point.js"></script>
     <script src="js/spot.js"></script>
     <script src="js/calibration.js"></script>
@@ -18,12 +19,12 @@
 
         function toogleCrossMode() {            
             if (!crossModeIsOn) {
-                spotParams.patRed = parseInt(document.getElementById('spotRed').value);
-                spotParams.patGreen = parseInt(document.getElementById('spotGreen').value);
-                spotParams.patBlue = parseInt(document.getElementById('spotBlue').value);
-                spotParams.squareDev = parseInt(document.getElementById('spotDev').value);
-                spotParams.minPointsCount = parseInt(document.getElementById('spotMinPt').value);
-                spotParams.maxPointsToConsiderDot = parseInt(document.getElementById('spotMaxPt').value);
+                spotParams.patRed = parseInt($('#spotRed').val());
+                spotParams.patGreen = parseInt($('#spotGreen').val());
+                spotParams.patBlue = parseInt($('#spotBlue').val());
+                spotParams.squareDev = parseInt($('#spotDev').val());
+                spotParams.minPointsCount = parseInt($('#spotMinPt').val());
+                spotParams.maxPointsToConsiderDot = parseInt($('#spotMinPt').val());
                 
                 localStorage["patRed"] = spotParams.patRed;
                 localStorage["patGreen"] = spotParams.patGreen;
@@ -49,17 +50,19 @@
         function onLoad() {
             calibrationCanvas = document.getElementById('calibrationCanvas');
             calibrationCanvas.addEventListener("click", calibrationCanvasOnClick, false);
+            var btnCrossMode = document.getElementById('btnCrossMode');
+            var btnScreenShot = document.getElementById('btnScreenShot');
+            btnCrossMode.addEventListener('click', toogleCrossMode, false);
+            btnScreenShot.addEventListener('click', makeScreenShot, false); 
             
-            if (localStorage["patRed"] != null) document.getElementById("spotRed").value = localStorage["patRed"];
-            if (localStorage["patGreen"] != null) document.getElementById("spotGreen").value = localStorage["patGreen"];
-            if (localStorage["patBlue"] != null) document.getElementById("spotBlue").value = localStorage["patBlue"];
+            if (localStorage["patRed"] != null) $("#spotRed").val(localStorage["patRed"]);
+            if (localStorage["patGreen"] != null) $("#spotGreen").val(localStorage["patGreen"]);
+            if (localStorage["patBlue"] != null) $("#spotBlue").val(localStorage["patBlue"]);
             
 
             var isStreaming = false;
             var videoCtx = document.getElementById('v');
-            var c = document.getElementById('c');
-            var btnCrossMode = document.getElementById('btnCrossMode');
-            var btnScreenShot = document.getElementById('btnScreenShot');
+            var c = document.getElementById('c');            
             var con = c.getContext('2d');
             var w = 600;
             var h = 420;
@@ -127,13 +130,10 @@
                     drawColorCross(con, pointOfMassCenter.x, pointOfMassCenter.y, 6);
                 clusters = null;
             };
-
-            // When the grey button is clicked, toggle the greyness indicator
-            btnCrossMode.addEventListener('click', toogleCrossMode, false);
-            btnScreenShot.addEventListener('click', makeScreenShot, false);          
         }
     </script>
 </head>
+
 <body onload="onLoad()">
 	<video id='v'></video>	
 	<canvas id='c'></canvas>

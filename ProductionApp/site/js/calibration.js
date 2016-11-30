@@ -5,13 +5,11 @@ var position;
 var clickCounter = 1;
 
 
-function calibrationCanvasOnClick(e) {
+function calibrationCanvasOnClickLegacy(e) {
     clickCounter++;
     if (clickCounter == 2) clickCounter = 0;
     
-
     calibrationContext.putImageData(imageData, 0, 0);
-
 
     var oldPosition = { x: 0, y: 0 };
     var radius = 30;
@@ -36,8 +34,21 @@ function calibrationCanvasOnClick(e) {
     calibrationContext.lineWidth = 2;
     calibrationContext.strokeStyle = '#003300';
     calibrationContext.stroke();
-    
-    
+}
+
+function calibrationCanvasOnClick(e) {
+    var pos = getCursorPosition(e);
+    var imgBits = imageData;
+    var stride = 4;
+    var w = imgBits.width;
+    var ind = (pos.x + pos.y * w) * stride;
+
+    var red = imgBits[ind];
+    var green = imgBits[ind + 1];
+    var blue = imgBits[ind + 2];
+    $('#spotRed').val(red);
+    $('#spotGreen').val(green);
+    $('#spotBlue').val(blue);
 }
 
 function getCursorPosition(e) {
