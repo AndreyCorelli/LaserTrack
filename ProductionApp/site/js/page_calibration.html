@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+	<meta charset='utf-8' />
+	<title>Laser Track</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<link href="css/defstyles.css" rel="stylesheet" />
+ 
+	
+    <script src="js/jquery-3.1.1.min.js"></script>
+    <script src="js/point.js"></script>
+    <script src="js/spot.js"></script>
+    <script src="js/calibration.js"></script>
+
+    <script type="text/javascript">
+        $(function () {
+            window.model = new CalibrationModel();
+            window.model.startCapture();
+        })
+
+        function CalibrationModel() {
+            this.paused = false;
+            this.imageData = null;
+            this.calibrationContext = null;
+            this.restoreLocalSettings();
+            this.spotParams = new LazerSpot();
+            $("#startPause").click(function() {
+                window.model.pauseResume();
+            });
+            /*this.calibrationCanvas = document.getElementById("calibrationCanvas");
+            this.calibrationCanvas.addEventListener("click", 
+                function (e) {
+                    window.model.calibrationCanvasClick(e);
+                }, false);*/        
+        }
+
+        CalibrationModel.prototype.pauseResume = function () {
+            this.paused = !this.paused;
+            var text = paused ? 'Start' : 'Pause';
+            $("#startPause").val(text);
+        }
+
+        CalibrationModel.prototype.restoreLocalSettings = function () {
+            if (localStorage["patRed"] != null) $("#spotRed").val(localStorage["patRed"]);
+            if (localStorage["patGreen"] != null) $("#spotGreen").val(localStorage["patGreen"]);
+            if (localStorage["patBlue"] != null) $("#spotBlue").val(localStorage["patBlue"]);
+        }
+
+        CalibrationModel.prototype.readSpotParams = function () {
+            spotParams.patRed = parseInt($('#spotRed').val());
+            spotParams.patGreen = parseInt($('#spotGreen').val());
+            spotParams.patBlue = parseInt($('#spotBlue').val());
+            spotParams.squareDev = parseInt($('#spotDev').val());
+            spotParams.minPointsCount = parseInt($('#spotMinPt').val());
+            spotParams.maxPointsToConsiderDot = parseInt($('#spotMinPt').val());
+            
+            localStorage["patRed"] = spotParams.patRed;
+            localStorage["patGreen"] = spotParams.patGreen;
+            localStorage["patBlue"] = spotParams.patBlue;
+        }
+
+        CalibrationModel.prototype.startCapture = function () {
+            this.isStreaming = false;
+            this.videoCtx = document.getElementById('v');
+            this.c = document.getElementById('c');            
+            this.con = c.getContext('2d');
+            this.w = 600;
+            this.h = 420;
+            var thisObj = this;
+
+            navigator.getUserMedia = (navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia);
+            if (navigator.getUserMedia) {
+                navigator.getUserMedia(
+                    {
+                        video: true,
+                        audio: false
+                    },
+                    function (stream) {
+                        var url = window.URL || window.webkitURL;
+                        thisObj.videoCtx.src = url ? url.createObjectURL(stream) : stream;
+                        thisObj.videoCtx.play();
+                    },
+                    function (error) {
+                        console.log(error);
+                        alert('Something went wrong. (error code ' + error.code + ')');
+                        return;
+                    }
+                );
+            }
+            else {
+                alert('Sorry, the browser you are using doesn\'t support getUserMedia');
+                return;
+            }
+
+            thisObj.videoCtx.addEventListener('canplay', function (e) {
+                if (!thisObj.isStreaming) {
+                    if (thisObj.videoCtx.videoWidth > 0)
+                        thisObj.h = thisObj.videoCtx.videoHeight / (thisObj.videoCtx.videoWidth / thisObj.w);
+                    thisObj.c.setAttribute('width', thisObj.w);
+                    thisObj.c.setAttribute('height', thisObj.h);
+                    // Reverse the canvas image
+                    //con.translate(w, 0);
+                    //con.scale(-1, 1);
+                    thisObj.isStreaming = true;
+                }
+            }, false);
+
+            // Wait for the video to start to play
+            thisObj.videoCtx.addEventListener('play', function () {
+                // Every 33 milliseconds copy the video image to the canvas
+                setInterval(function () {
+                    if (thisObj.videoCtx.paused || thisObj.videoCtx.ended) return;
+                    if (thisObj.paused) return;
+
+                    thisObj.con.fillRect(0, 0, thisObj.w, thisObj.h);
+                    thisObj.con.drawImage(thisObj.videoCtx, 0, 0, thisObj.w, thisObj.h);
+                    // if ...
+                    thisObj.processImage();
+                }, 33);
+            }, false);
+        }
+
+        CalibrationModel.prototype.processImage = function () {
+            // получить биты картинки
+            var thisObj = window.model;
+            thisObj.imageData = thisObj.con.getImageData(0, 0, thisObj.c.width, thisObj.c.height);
+            // отметить кластер
+            var pointOfMassCenter = FindLaserSpotCenter(thisObj.spotParams, thisObj.imageData);
+            if (pointOfMassCenter)
+                drawColorCross(thisObj.con, pointOfMassCenter.x, pointOfMassCenter.y, 6);
+            clusters = null;
+        }
+    </script>
+</head>
+
+<body>
+	<video id='v'></video>	
+	<canvas id='c'></canvas>
+    <br/>
+
+	<input type="button" value="Pause" id="startPause" />
+    <br />
+    <br />
+    <br />
+    <table>
+        <tr>
+            <td>R</td> <td>G</td> <td>B</td>  <td>Max dev.</td>  <td>Min points</td>  <td>Max points</td>
+        </tr>
+        <tr>
+            <td>
+                <input type="text" id="spotRed" value="250" />
+            </td>
+            <td>
+                <input type="text" id="spotGreen" value="100" />
+            </td>
+            <td>
+                <input type="text" id="spotBlue" value="100" />
+            </td>
+            <td>
+                <input type="text" id="spotDev" value="5000" />
+            </td>
+            <td>
+                <input type="text" id="spotMinPt" value="20" />
+            </td>            
+            <td>
+                <input type="text" id="spotMaxPt" value="150" />
+            </td>            
+        </tr>
+    </table>
+</body>
+</html>
