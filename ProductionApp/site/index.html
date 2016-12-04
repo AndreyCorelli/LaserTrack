@@ -37,7 +37,7 @@
         }
 
         CalibrationModel.prototype.imageClicked = function(e) {
-            if (this.paused) return;
+            if (!this.paused) return;
             this.markerPreview.canvasPos = this.getCursorPosition(e);
             this.markerPreview.drawSpotPreview();
         }
