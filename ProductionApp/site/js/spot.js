@@ -2,9 +2,9 @@
 // описание пятна лазерной указки для поиска его на картинке
 //////////////////////////////////////////////////////////////////////////////////////////////
 function LazerSpot() {
-    this.patRed = 0;
-    this.patGreen = 0;
-    this.patBlue = 0;
+    this.patRed = 255;
+    this.patGreen = 200;
+    this.patBlue = 200;
     this.squareDev = 5000;
     this.minPointsCount = 10;
     this.maxPointsToConsiderDot = 100;

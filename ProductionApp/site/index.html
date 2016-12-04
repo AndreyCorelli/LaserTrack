@@ -11,6 +11,7 @@
     <script src="js/point.js"></script>
     <script src="js/spot.js"></script>
     <script src="js/calibration.js"></script>
+    <script src="js/marker_preview.js"></script>
 
     <script type="text/javascript">
         $(function () {
@@ -24,10 +25,11 @@
             this.calibrationContext = null;
             this.restoreLocalSettings();
             this.spotParams = new LazerSpot();
-            this.c = document.getElementById('c');            
+            this.c = document.getElementById('c'); 
+            this.markerPreview = new MarkerPreview('spotPreview', this.c);
             this.con = c.getContext('2d');
             this.w = 600;
-            this.h = 420;
+            this.h = 420;            
             this.c.addEventListener("click", function (e) { window.model.imageClicked(e); }, false);
             $("#startPause").click(function() {
                 window.model.pauseResume();
@@ -35,9 +37,9 @@
         }
 
         CalibrationModel.prototype.imageClicked = function(e) {
-            var pos = this.getCursorPosition(e);
-            //console.log('click: ' + pos.x + ", " + pos.y);
-            
+            if (this.paused) return;
+            this.markerPreview.canvasPos = this.getCursorPosition(e);
+            this.markerPreview.drawSpotPreview();
         }
 
         CalibrationModel.prototype.getCursorPosition = function(e) {
@@ -50,26 +52,21 @@
 
         CalibrationModel.prototype.pauseResume = function () {
             this.paused = !this.paused;
-            var text = paused ? 'Start' : 'Pause';
+            var text = this.paused ? 'Start' : 'Pause';
             $("#startPause").val(text);
         }
 
         CalibrationModel.prototype.restoreLocalSettings = function () {
-            if (localStorage["patRed"] != null) $("#spotRed").val(localStorage["patRed"]);
-            if (localStorage["patGreen"] != null) $("#spotGreen").val(localStorage["patGreen"]);
-            if (localStorage["patBlue"] != null) $("#spotBlue").val(localStorage["patBlue"]);
+            var json = localStorage["settings_spotParams"];
+            if (!json) return;
+            try {
+                this.spotParams = JSON.parse(json);
+            }
+            catch (ex) {}
         }
 
-        CalibrationModel.prototype.readSpotParams = function () {
-            spotParams.patRed = parseInt($('#spotRed').val());
-            spotParams.patGreen = parseInt($('#spotGreen').val());
-            spotParams.patBlue = parseInt($('#spotBlue').val());
-            spotParams.squareDev = parseInt($('#spotDev').val());
-            spotParams.minPointsCount = parseInt($('#spotMinPt').val());
-            spotParams.maxPointsToConsiderDot = parseInt($('#spotMinPt').val());         
-            localStorage["patRed"] = spotParams.patRed;
-            localStorage["patGreen"] = spotParams.patGreen;
-            localStorage["patBlue"] = spotParams.patBlue;
+        CalibrationModel.prototype.saveSpotParams = function () {
+            localStorage["settings_spotParams"] = JSON.stringify(this.spotParams);
         }
 
         CalibrationModel.prototype.startCapture = function () {
@@ -152,30 +149,18 @@
     <br />
     <br />
     <br />
+
     <table>
         <tr>
-            <td>R</td> <td>G</td> <td>B</td>  <td>Max dev.</td>  <td>Min points</td>  <td>Max points</td>
-        </tr>
-        <tr>
             <td>
-                <input type="text" id="spotRed" value="250" />
+                <canvas id="spotPreview" height="100" width="100"></canvas>
             </td>
+            <td>&nbsp;&nbsp;&nbsp;</td>
             <td>
-                <input type="text" id="spotGreen" value="100" />
+                <input id="previewMarkSz" type="range" min="2" max="15" value="8" />
             </td>
-            <td>
-                <input type="text" id="spotBlue" value="100" />
-            </td>
-            <td>
-                <input type="text" id="spotDev" value="5000" />
-            </td>
-            <td>
-                <input type="text" id="spotMinPt" value="20" />
-            </td>            
-            <td>
-                <input type="text" id="spotMaxPt" value="150" />
-            </td>            
         </tr>
     </table>
+    
 </body>
 </html>
