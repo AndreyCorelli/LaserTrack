@@ -24,14 +24,28 @@
             this.calibrationContext = null;
             this.restoreLocalSettings();
             this.spotParams = new LazerSpot();
+            this.c = document.getElementById('c');            
+            this.con = c.getContext('2d');
+            this.w = 600;
+            this.h = 420;
+            this.c.addEventListener("click", function (e) { window.model.imageClicked(e); }, false);
             $("#startPause").click(function() {
                 window.model.pauseResume();
             });
-            /*this.calibrationCanvas = document.getElementById("calibrationCanvas");
-            this.calibrationCanvas.addEventListener("click", 
-                function (e) {
-                    window.model.calibrationCanvasClick(e);
-                }, false);*/        
+        }
+
+        CalibrationModel.prototype.imageClicked = function(e) {
+            var pos = this.getCursorPosition(e);
+            //console.log('click: ' + pos.x + ", " + pos.y);
+            
+        }
+
+        CalibrationModel.prototype.getCursorPosition = function(e) {
+            var rect = this.c.getBoundingClientRect();
+            return {
+                x: Math.round(e.clientX - rect.left, 0),
+                y: Math.round(e.clientY - rect.top, 0)
+            };
         }
 
         CalibrationModel.prototype.pauseResume = function () {
@@ -52,8 +66,7 @@
             spotParams.patBlue = parseInt($('#spotBlue').val());
             spotParams.squareDev = parseInt($('#spotDev').val());
             spotParams.minPointsCount = parseInt($('#spotMinPt').val());
-            spotParams.maxPointsToConsiderDot = parseInt($('#spotMinPt').val());
-            
+            spotParams.maxPointsToConsiderDot = parseInt($('#spotMinPt').val());         
             localStorage["patRed"] = spotParams.patRed;
             localStorage["patGreen"] = spotParams.patGreen;
             localStorage["patBlue"] = spotParams.patBlue;
@@ -62,10 +75,7 @@
         CalibrationModel.prototype.startCapture = function () {
             this.isStreaming = false;
             this.videoCtx = document.getElementById('v');
-            this.c = document.getElementById('c');            
-            this.con = c.getContext('2d');
-            this.w = 600;
-            this.h = 420;
+            
             var thisObj = this;
 
             navigator.getUserMedia = (navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia);
